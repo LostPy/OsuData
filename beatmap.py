@@ -70,7 +70,7 @@ class Beatmap:
 			raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def metadata(self):
-		return {k: v for k, v in self.__dict__().items() if k != 'hitobjects_data'}
+		return {k: v for k, v in self.__dict__.items() if k != 'hitobjects_data'}
 
 	def keys(self):
 		return self.__dict__.keys()
