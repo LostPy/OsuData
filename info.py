@@ -4,9 +4,7 @@ Project: OsuDatas
 Author: LostPy
 """
 
-import os
 import pandas as pd
-import pydub
 
 from musicOsu import MusicOsu
 from beatmap import Beatmap
@@ -36,8 +34,17 @@ def beatmap_error(file_path: str = None, dataframe: pd.DataFrame = None):
 	pass
 
 
-def play_music(music_path: str = None, musicosu: MusicOsu = None):
-	pass
+def play_music(folder_path: str, musicosu: MusicOsu = None):
+	if musicosu is not None:
+		if isinstance(musicosu, MusicOsu):
+			musicosu.play_music()
+		else:
+			raise TypeError("'musicosu' must be an instance of 'MusicOsu'")
+	else:
+		if type(music_path) is str:
+			MusicOsu.from_folder(folder_path).play_music()
+		else:
+			raise TypeError("folder_path must be a str")
 
 
 def beatmap_data(beatmap: Beatmap):

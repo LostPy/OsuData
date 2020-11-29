@@ -99,10 +99,10 @@ class MusicOsu:
 		return {k: v for k, v in self.__dict__().items()}
 
 	def keys(self):
-		return self.__dict__().keys()
+		return self.__dict__.keys()
 
 	def values(self):
-		return self.__dict__().values()
+		return self.__dict__.values()
 
 	def load(self):
 		first = True

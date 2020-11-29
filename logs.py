@@ -24,30 +24,25 @@ class Logs:
 	@staticmethod
 	def info(msg: str):
 		msg_log = f"[{datetime_log()}][INFO] {msg}"
-
 		print(Logs.color_info + msg_log + Fore.RESET)
 
 	@staticmethod
 	def debug(msg: str):
 		msg_log = f"[{datetime_log()}][DEBUG] {msg}"
-
 		print(Logs.color_debug + msg_log + Fore.RESET)
 
 	@staticmethod
 	def error(msg: str):
 		msg_log = f"[{datetime_log()}][ERROR] {msg}"
-
 		print(Logs.color_error + msg_log + Fore.RESET)
 
 	@staticmethod
 	def warning(msg: str):
 		msg_log = f"[{datetime_log()}][WARNING] {msg}"
-
 		print(Logs.color_warning + msg_log + Fore.RESET) 
 
 	@staticmethod
 	def success(msg: str):
-		msg_log = f"[{datetime_log()}][SUCCESS] {msg}"
-		
+		msg_log = f"[{datetime_log()}][SUCCESS] {msg}"		
 		print(Logs.color_success + msg_log + Fore.RESET) 
 

@@ -7,7 +7,6 @@ Author: LostPy
 import pandas as pd
 
 from loads import load_beatmap
-from beatmapError import BeatmapError
 
 
 class Beatmap:
@@ -74,10 +73,10 @@ class Beatmap:
 		return {k: v for k, v in self.__dict__().items() if k != 'hitobjects_data'}
 
 	def keys(self):
-		return self.__dict__().keys()
+		return self.__dict__.keys()
 
 	def values(self):
-		return self.__dict__().values()
+		return self.__dict__.values()
 
 	def load(self, lines: list = None, hitobjects=True):
 		if lines is None:
@@ -87,15 +86,14 @@ class Beatmap:
 					lines.remove('')
 
 		valid, datas = load_beatmap(self.path, lines=lines)
-		
 		if valid:
 			self.name = datas['title']
 			self.version_fmt = datas['version_fmt']
 			self.creator = datas['Creator']
-			difficulties['HP'] = datas['HP']
-			difficulties['CS'] = datas['CS']
-			difficulties['OD'] = datas['OD']
-			difficulties['AR'] = datas['AR']
+			self.difficulties['HP'] = datas['HP']
+			self.difficulties['CS'] = datas['CS']
+			self.difficulties['OD'] = datas['OD']
+			self.difficulties['AR'] = datas['AR']
 			self.time = datas['time']
 			self.diffname = datas['DifficultyName']
 			if hitobjects:

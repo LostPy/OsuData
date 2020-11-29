@@ -19,8 +19,7 @@ from beatmapError import BeatmapError
 def to_csv(folderpath: str, csv_path: str = ''):
 	musicosu = musicOsu.MusicOsu.from_folder(folderpath)
 	if musicosu.ratio_error < 1.:
-		if csv_path == '':
-			csv_path = f'./{musicosu.title}.csv'
+		csv_path = f'./{musicosu.title}.csv' if csv_path == '' else csv_path
 		musicosu.to_csv(csv_path)
 		return csv_path
 	else:
@@ -33,7 +32,7 @@ def to_excel(folderpath: str, excel_path: str = '', *args, **kwargs):
 		metadatas = musicosu.to_dataframe()
 		music_data = musicosu.music_to_dataframe()
 		hitobjects = musicosu.dataframe_hitobjects()
-		excel_path = f'./{musicosu.title}.xlsx' if excel_path == ''
+		excel_path = f'./{musicosu.title}.xlsx' if excel_path == '' else excel_path
 		with pd.ExcelWriter(excel_path, 'a') as writer:
 			for df, name in zip([metadatas, music_data, hitobjects], ['metadatas', 'music data', 'hitobjects']):
 				df.to_excel(writer, sheet_name=name, *args, **kwargs)  # à verifier
@@ -89,7 +88,7 @@ def osu_to_dataframe(osu_path: str, display_progress: bool = True):
 def osu_to_csv(osu_path: str, csv_path:str = '', data_type: str = 'metadata', display_progress=True):
 	"""export metadata or hitobjects in a csv file"""
 	metadata, hitobjects = osu_to_dataframe(osu_path, display_progress)
-	csv_path = f'./osu_{data_type}.csv' if csv_path == ''
+	csv_path = f'./osu_{data_type}.csv' if csv_path == '' else csv_path
 	if data_type == 'metadata':
 		metadata.to_csv(csv_path, sep='$')
 	elif data_type == 'hitobjects':
@@ -102,7 +101,7 @@ def osu_to_csv(osu_path: str, csv_path:str = '', data_type: str = 'metadata', di
 def osu_to_excel(osu_path: str, excel_path: str = '', display_progress=True, **kwargs):
 	"""export metadata and hitobjects in a xlsx file"""
 	metadata, hitobjects = osu_to_dataframe(osu_path, display_progress)
-	excel_path = './osu_data.xlsx' if excel_path == ''
+	excel_path = './osu_data.xlsx' if excel_path == '' else excel_path
 	with pd.ExcelWriter(excel_path, 'a') as writer:
 		metadata.to_excel(writer, sheet_name='metadata', **kwargs)
 		hitobjects.to_excel(writer, sheet_name='hitobjects', **kwargs)

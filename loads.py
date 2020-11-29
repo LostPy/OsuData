@@ -5,6 +5,7 @@ Author: LostPy
 """
 
 import os
+import time
 import pandas as pd
 
 from logs import Logs
