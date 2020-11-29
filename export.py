@@ -78,7 +78,7 @@ def musicOsu_objects(osu_path: str, display_progress: bool = True):
 
 
 def osu_to_dataframe(osu_path: str, display_progress: bool = True):
-	"""This function extract beatmaps data from osu folder and return a dataframe."""
+	"""A function to extract beatmaps data from osu folder and return a dataframe."""
 	musicosu_objects, errors = musicOsu_objects(osu_path, display_progress=display_progress)
 	metadata = pd.concat([musicosu.to_dataframe() for musicosu in musicosu_objects], axis=1)
 	hitobjects_data = pd.concat([musicosu.dataframe_hitobjects() for musicosu in musicosu_objects], axis=1)
@@ -88,7 +88,7 @@ def osu_to_dataframe(osu_path: str, display_progress: bool = True):
 
 
 def osu_to_csv(osu_path: str, csv_path:str = '', data_type: str = 'metadata', display_progress=True):
-	"""export metadata or hitobjects in a csv file."""
+	"""Export metadata or hitobjects in a csv file."""
 	metadata, hitobjects = osu_to_dataframe(osu_path, display_progress)
 	csv_path = f'./osu_{data_type}.csv' if csv_path == '' else csv_path
 	if data_type == 'metadata':
@@ -101,7 +101,7 @@ def osu_to_csv(osu_path: str, csv_path:str = '', data_type: str = 'metadata', di
 
 
 def osu_to_excel(osu_path: str, excel_path: str = '', display_progress=True, **kwargs):
-	"""export metadata and hitobjects in a xlsx file."""
+	"""Export metadata and hitobjects in a xlsx file."""
 	metadata, hitobjects = osu_to_dataframe(osu_path, display_progress)
 	excel_path = './osu_data.xlsx' if excel_path == '' else excel_path
 	with pd.ExcelWriter(excel_path, 'a') as writer:
