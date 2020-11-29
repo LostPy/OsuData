@@ -4,31 +4,34 @@
 A small framework to work or vizualise osu! beatmaps data
 
 ## Global informations
-* Author: LostPy
-* Version: 1.0
-* statement: in progress...
-* requirements:
-	- Python 3.x
-	- colorama (for logs, you can replace logs by print)
-  - pydub
+  * Author: LostPy
+
+  * Version: 1.0
+  
+  * statement: in progress...
+  * requirements:
+    - Python 3.x
+    - colorama (for logs, you can replace logs by print)
+    - pydub
 
 ## Features
 ### Completed
-* Base Features
-	- Read beatmaps data
-  - Read music data
-	- Export datas in a csv or a excel file
-* Stats Graphs
+  * Base Features
+    - Read beatmaps data
+    - Read music data
+    - Export datas in a csv or a excel file
+  
+  * Stats Graphs
 
 ### Coming soon
-* Base Features
+  * Base Features
 
-* Stats Graphs
-	- Stats difficulties (HP, OD, CS, AR)
-	- Number of beatmaps in function of time
-	- Stats of an Artist
-	- Stats of a Creator
-	- Stats of time beatmaps
+  * Stats Graphs
+    - Stats difficulties (HP, OD, CS, AR)
+    - Number of beatmaps in function of time
+    - Stats of an Artist
+    - Stats of a Creator
+    - Stats of time beatmaps
 
 ### Documentation
 Coming soon...
