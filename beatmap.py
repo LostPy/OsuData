@@ -10,7 +10,7 @@ from loads import load_beatmap
 
 
 class Beatmap:
-	"""Class to represent a beatmap with this data"""
+	"""Class to represent a beatmap with this data."""
 
 	def __init__(self, path: str, **kwargs):
 		self.path = path
@@ -25,60 +25,73 @@ class Beatmap:
 		self.hitobjects_data = None
 
 	def __repr__(self):
+		"""return the representation of the dataframe of metadata."""
 		return self.to_dataframe().__repr__()
 
 	def __str__(self):
+		"""return the str of the dataframe of metadata."""
 		return self.__repr__()
 
 	def __len__(self):
+		"""return the time of the beatmap."""
 		return self.time
 
 	def __eq__(self, obj):
+		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars == obj.stars
 		else:
 			raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def __ne__(self, obj):
+		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars != obj.stars
 		else:
 			raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def __gt__(self, obj):
+		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars > obj.stars
 		else:
 			raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def __ge__(self, obj):
+		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars >= obj.stars
 		else:
 			raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def __lt__(self, obj):
+		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars < obj.stars
 		else:
 			raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def __le__(self, obj):
+		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars <= obj.stars
 		else:
 			raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def metadata(self):
+		"""return a dict with metadata of beatmaps."""
 		return {k: v for k, v in self.__dict__.items() if k != 'hitobjects_data'}
 
 	def keys(self):
+		"""return the name of attributes."""
 		return self.__dict__.keys()
 
 	def values(self):
+		"""return the values of attributes."""
 		return self.__dict__.values()
 
 	def load(self, lines: list = None, hitobjects=True):
+		"""load all data of beatmap and initialize the object."""
 		if lines is None:
 			with open(self.path, 'r') as beatmap:
 				lines = beatmap.read().split('\n')
@@ -102,6 +115,7 @@ class Beatmap:
 			self.valid = False
 
 	def load_hitobjects(self, lines: list = None):
+		"""load hitobjects data and set hitobects_data attribute."""
 		if lines is None:
 			with open(self.path, 'r') as f:
 				lines = f.readlines()
@@ -126,7 +140,7 @@ class Beatmap:
 		self.hitobjects_data = pd.DataFrame(data=datas, index=range(len(lines)), columns=datas.keys())
 
 	def to_dataframe(self):
-		"""return a DataFrame with metadatas of a beatmap"""
+		"""return a DataFrame with metadatas of a beatmap."""
 		metadata = {
 		'version_fmt': self.version_fmt,
 		'title': self.name,
@@ -141,7 +155,7 @@ class Beatmap:
 
 	@staticmethod
 	def from_file(filepath: str):
-		"""return a Beatmap instance with all data find in filepath"""
+		"""return a Beatmap instance with all data find in filepath."""
 		beatmap = Beatmap(filepath)
 		beatmap.load()
 		return beatmap
