@@ -24,7 +24,7 @@ A small framework to work or vizualise osu! beatmaps data
 * Base Features
 
 * Stats Graphs
-	- Stats difficulties (HP, OD, CS, HR)
+	- Stats difficulties (HP, OD, CS, AR)
 	- Number of beatmaps in function of time
 	- Stats of an Artist
 	- Stats of a Creator
