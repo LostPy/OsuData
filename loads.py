@@ -97,6 +97,6 @@ def from_osu(folderpath: str):
 			errors += errors_folder
 			end = time.time()
 			speed = round(1 / (end - start), ndigits=3) if end - start != 0. else speed
-	
+
 	df_beatmaps = pd.concat(beatmaps).reset_index(drop=True, inplace=True)
 	return df_beatmaps, errors

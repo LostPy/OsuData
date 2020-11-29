@@ -1,7 +1,7 @@
 """
 Project: discord Bot "Stats Bot"
-Version: 1.0
-Author: LostPy | Discord : Lost Music 🎶:notes:#8691
+
+Author: LostPy
 """
 
 from datetime import datetime
@@ -39,7 +39,7 @@ class Logs:
 	@staticmethod
 	def warning(msg: str):
 		msg_log = f"[{datetime_log()}][WARNING] {msg}"
-		print(Logs.color_warning + msg_log + Fore.RESET) 
+		print(Logs.color_warning + msg_log + Fore.RESET)
 
 	@staticmethod
 	def success(msg: str):

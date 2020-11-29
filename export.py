@@ -58,10 +58,10 @@ def musicOsu_objects(osu_path: str, display_progress: bool = True):
 	musicosu_objects = []
 	errors = []
 	if display_progress:
-		Logs.info(f"Playback of all .osu files in '{folderpath}' will start.")
+		Logs.info(f"Playback of all .osu files in '{osu_path}' will start.")
 		Logs.info("This action may take some time depending on the amount of files to be read..\n\n")
 		time.sleep(5)
-	songspath = os.path.join(folderpath, 'Songs/')
+	songspath = os.path.join(osu_path, 'Songs/')
 	list_dir = os.listdir(songspath)
 	speed = 0.
 	for i, name in enumerate(list_dir):
@@ -82,6 +82,8 @@ def osu_to_dataframe(osu_path: str, display_progress: bool = True):
 	musicosu_objects, errors = musicOsu_objects(osu_path, display_progress=display_progress)
 	metadata = pd.concat([musicosu.to_dataframe() for musicosu in musicosu_objects], axis=1)
 	hitobjects_data = pd.concat([musicosu.dataframe_hitobjects() for musicosu in musicosu_objects], axis=1)
+	if display_progress and len(errors) > 0:
+		Logs.warning(f'A error was found in these files: {errors}')
 	return metadata, hitobjects_data
 
 
