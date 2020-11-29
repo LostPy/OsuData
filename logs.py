@@ -43,6 +43,6 @@ class Logs:
 
 	@staticmethod
 	def success(msg: str):
-		msg_log = f"[{datetime_log()}][SUCCESS] {msg}"		
-		print(Logs.color_success + msg_log + Fore.RESET) 
+		msg_log = f"[{datetime_log()}][SUCCESS] {msg}"
+		print(Logs.color_success + msg_log + Fore.RESET)
 

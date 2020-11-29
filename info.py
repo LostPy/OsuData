@@ -41,7 +41,7 @@ def play_music(folder_path: str, musicosu: MusicOsu = None):
 		else:
 			raise TypeError("'musicosu' must be an instance of 'MusicOsu'")
 	else:
-		if type(music_path) is str:
+		if type(folder_path) is str:
 			MusicOsu.from_folder(folder_path).play_music()
 		else:
 			raise TypeError("folder_path must be a str")
