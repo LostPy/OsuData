@@ -1,4 +1,5 @@
-"""To display a basic progress bar and info"""
+"""To display a basic progress bar and info."""
+
 import sys
 
 
