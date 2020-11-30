@@ -13,6 +13,7 @@ A small framework to work or vizualise osu! beatmaps data
     - Python 3.x
     - colorama (for logs, you can replace logs by print)
     - pydub
+    - pandas
 
 ## Features
 ### Completed
