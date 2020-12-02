@@ -106,21 +106,26 @@ class MusicOsu:
 
 	def load(self):
 		first = True
+		print("avant for")
 		for name in os.listdir(self.folderpath):
 			path = os.path.isfile(os.path.join(self.folderpath, name))
 			if path and name.endswith((".osu", )):
 				if first:
+					print('first beatmap found')
 					with open(path, 'r') as f:
+						print('yes')
 						lines = f.read().split('\n')
+						print(lines[:10])
 						while '\n' in lines:
+							print('ah')
 							lines.remove('\n')
 					valid, data = load_beatmap(path, lines)
 					if valid:
+						print('beatmap is valid')
 						self.music_path = lines[...]
 						self.title = data['title']
 						self.artist = data['Artist']
 						first = False
-
 				beatmap = Beatmap.from_file(path)
 				self.beatmaps.append(beatmap) if beatmap.valid else self.errors.append(path)
 
@@ -130,9 +135,10 @@ class MusicOsu:
 			self.ratio_error = len(self.errors) / (len(self.errors) + len(self.beatmaps))
 		else:
 			self.ratio_error = 1.  # 100% error because there isn't beatmaps
+		print('sortie de la fonction')
 
 	def to_dataframe(self):
-		df pd.concat(self.beatmaps, axis=1)
+		df = pd.concat(self.beatmaps, axis=1)
 		df['Artist'] = self.artist
 		return df
 
@@ -142,7 +148,8 @@ class MusicOsu:
 	def to_csv(self, path: str = None):
 		return self.to_dataframe().to_csv(path, sep='$')
 
-	def to_excel(self, path: str = None, sheet_name=self.title):
+	def to_excel(self, path: str = None, sheet_name=''):
+		sheet_name = self.title if sheet_name == '' else sheet_name
 		return self.to_dataframe().to_excel(path, sheet_name=sheet_name)
 
 	def mp3_object(self):
