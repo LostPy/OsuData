@@ -7,6 +7,7 @@ Author: LostPy
 import os
 import time
 
+import numpy as np
 import pandas as pd
 import pydub
 
@@ -31,11 +32,14 @@ def to_excel(folderpath: str, excel_path: str = '', *args, **kwargs):
 	musicosu = MusicOsu.from_folder(folderpath)
 	if musicosu.ratio_error < 1.:
 		metadatas = musicosu.to_dataframe()
-		music_data = musicosu.music_to_dataframe()
 		hitobjects = musicosu.dataframe_hitobjects()
+		print(metadatas)
+		print(hitobjects)
+		mode = 'w' if excel_path.strip() == '' else 'a'
 		excel_path = f'./{musicosu.title}.xlsx' if excel_path == '' else excel_path
-		with pd.ExcelWriter(excel_path, 'a') as writer:
-			for df, name in zip([metadatas, music_data, hitobjects], ['metadatas', 'music data', 'hitobjects']):
+		print(mode)
+		with pd.ExcelWriter(excel_path, mode=mode) as writer:
+			for df, name in zip([metadatas, hitobjects], ['metadatas', 'hitobjects']):
 				df.to_excel(writer, sheet_name=name, *args, **kwargs)  # à verifier
 		return excel_path
 
@@ -74,7 +78,8 @@ def musicOsu_objects(osu_path: str, display_progress: bool = True):
 			musicosu_objects.append(musicosu)
 			errors += musicosu.errors
 			end = time.time()
-			speed = round(1 / (end - start), ndigits=3) if end - start != 0. else speed
+			if (end - start) != 0:
+				speed = round((1 / (end - start)+speed*i) / (i+1), ndigits=3)
 	return musicosu_objects, errors
 
 
@@ -90,16 +95,16 @@ def from_beatmap(filepath: str) -> pd.DataFrame:
 def from_folder(folderpath: str):
 	"""A function read and extract beatmaps datas of a folder."""
 	musicosu_objects, errors = musicOsu_objects(osu_path, display_progress=display_progress)
-	metadata = pd.concat([musicosu.to_dataframe() for musicosu in musicosu_objects], axis=1)
-	hitobjects_data = pd.concat([musicosu.dataframe_hitobjects() for musicosu in musicosu_objects], axis=1)
+	metadata = pd.concat([musicosu.to_dataframe() for musicosu in musicosu_objects], axis=0).reset_index(drop=True)
+	hitobjects_data = pd.concat([musicosu.dataframe_hitobjects() for musicosu in musicosu_objects], axis=0).reset_index(drop=True)
 	return metadata, hitobjects_data, errors
 
 
 def from_osu(osu_path: str, display_progress: bool = True):
 	"""A function to extract beatmaps data from osu folder and return two dataframe and a list of path where there is a error."""
 	musicosu_objects, errors = musicOsu_objects(osu_path, display_progress=display_progress)
-	metadata = pd.concat([musicosu.to_dataframe() for musicosu in musicosu_objects], axis=1)
-	hitobjects_data = pd.concat([musicosu.dataframe_hitobjects() for musicosu in musicosu_objects], axis=1)
+	metadata = pd.concat([musicosu.to_dataframe() for musicosu in musicosu_objects], axis=0).reset_index(drop=True)
+	hitobjects_data = pd.concat([musicosu.dataframe_hitobjects() for musicosu in musicosu_objects], axis=0).reset_index(drop=True)
 	if display_progress and len(errors) > 0:
 		Logs.warning(f'A error was found in these files: {errors}')
 	return metadata, hitobjects_data, errors
@@ -107,23 +112,40 @@ def from_osu(osu_path: str, display_progress: bool = True):
 
 def osu_to_csv(osu_path: str, csv_path:str = '', data_type: str = 'metadata', display_progress=True):
 	"""Export metadata or hitobjects in a csv file."""
-	metadata, hitobjects = from_osu(osu_path, display_progress)
+	metadata, hitobjects, errors = from_osu(osu_path, display_progress)
 	csv_path = f'./osu_{data_type}.csv' if csv_path == '' else csv_path
+	Logs.info("the csv file is being created...")
 	if data_type == 'metadata':
 		metadata.to_csv(csv_path, sep='$')
 	elif data_type == 'hitobjects':
 		hitobjects.to_csv(csv_path, sep='$')
 	else:
 		raise AttributeError("'data_type' must be a str and can take the values: 'metadata' or 'hitobjects'")
+	if len(errors) > 0:
+		Logs.warning(f'There is a error or more was found in these files: {errors}')
+	else:
+		Logs.success('There is not error during the export data')
 	return csv_path
 
 
 def osu_to_excel(osu_path: str, excel_path: str = '', display_progress=True, **kwargs):
 	"""Export metadata and hitobjects in a xlsx file."""
-	metadata, hitobjects = from_osu(osu_path, display_progress)
+	metadata, hitobjects, errors = from_osu(osu_path, display_progress)
+	mode = 'w' if excel_path.strip() == '' else 'a'
 	excel_path = './osu_data.xlsx' if excel_path == '' else excel_path
-	with pd.ExcelWriter(excel_path, 'a') as writer:
-		metadata.to_excel(writer, sheet_name='metadata', **kwargs)
-		hitobjects.to_excel(writer, sheet_name='hitobjects', **kwargs)
+	with pd.ExcelWriter(excel_path, mode=mode) as writer:
+		Logs.info("the 'metadata' sheet is being created...")
+		metadata[:1048576].to_excel(writer, sheet_name='metadata', **kwargs)
+		Logs.info("the 'hitobjects' sheet is being created...")
+		hitobjects[:1048576].to_excel(writer, sheet_name='hitobjects', **kwargs)
+
+	if metadata.shape[0] > 1048576:
+		Logs.warning(f'The sheet "metadata" is too large ({metadata.shape[0]} lines), the maximum size has been keeping (1048576)')
+	if hitobjects.shape[0] > 1048576:
+		Logs.warning(f'The sheet "hitobjects" is too large ({hitobjects.shape[0]} lines), the maximum size has been keeping (1048576)')
+	if len(errors) > 0:
+		Logs.warning(f'There is a error or more was found in these files: {errors}')
+	else:
+		Logs.success('There is not error during the export data')
 	return excel_path
 

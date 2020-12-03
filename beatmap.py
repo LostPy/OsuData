@@ -93,7 +93,7 @@ class Beatmap:
 	def load(self, lines: list = None, hitobjects=True):
 		"""Load all data of beatmap and initialize the object."""
 		if lines is None:
-			with open(self.path, 'r') as beatmap:
+			with open(self.path, 'r', encoding='utf8') as beatmap:
 				lines = beatmap.read().split('\n')
 				while '' in lines:
 					lines.remove('')
@@ -111,16 +111,17 @@ class Beatmap:
 			self.diffname = datas['DifficultyName']
 			if hitobjects:
 				self.load_hitobjects(lines)
-		else:
-			self.valid = False
+		
+		self.valid = valid
 
 	def load_hitobjects(self, lines: list = None):
 		"""Load hitobjects data and set hitobects_data attribute."""
 		if lines is None:
-			with open(self.path, 'r') as f:
-				lines = f.readlines()
-				nb_columns_circle = 5 if int(lines[0][lines[0].find('v')+1:-1]) < 10 else 6
-				lines = lines[lines.index('[HitObjects]\n')+1:]
+			with open(self.path, 'r', encoding='utf8') as f:
+				lines = f.read().split('\n')
+		version_fmt = int(lines[0][lines[0].find('v')+1:])
+		nb_columns_circle = 5 if version_fmt < 10 else 6
+		lines = lines[lines.index('[HitObjects]')+1:]
 		datas = {'X': [],
 				'Y': [],
 				'time': [],

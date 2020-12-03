@@ -22,7 +22,7 @@ def load_beatmap(filepath: str, lines: list = None) -> dict:
 		difficulties = lines[lines.index('[Difficulty]')+1:lines.index('[Events]')]
 		time = lines[-1].split(',')[2]
 		version_fmt = int(lines[0][lines[0].find("v")+1:])
-	except IndexError:
+	except IndexError as e:
 		return False, [filepath]
 
 	datas = {
