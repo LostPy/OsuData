@@ -32,57 +32,63 @@ class MusicOsu:
 		return self.__repr__()
 
 	def __len__(self):
+		"""Number of beatmaps."""
 		return len(self.beatmaps)
 
 	def __eq__(self, obj):
+		"""To compare 2 MusicOsu."""
 		if isinstance(obj, MusicOsu):
-			return self.beatmaps == obj.beatmaps
+			return len(self.beatmaps) == len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __ne__(self, obj):
 		if isinstance(obj, MusicOsu):
-			return self.beatmaps != obj.beatmaps
+			return len(self.beatmaps) != len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __gt__(self, obj):
 		if isinstance(obj, MusicOsu):
-			return self.beatmaps > obj.beatmaps
+			return len(self.beatmaps) > len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __ge__(self, obj):
 		if isinstance(obj, MusicOsu):
-			return self.beatmaps >= obj.beatmaps
+			return len(self.beatmaps) >= len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __lt__(self, obj):
 		if isinstance(obj, MusicOsu):
-			return self.beatmaps < obj.beatmaps
+			return len(self.beatmaps) < len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __le__(self, obj):
 		if isinstance(obj, MusicOsu):
-			return self.beatmaps <= obj.beatmaps
+			return len(self.beatmaps) <= len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __getitem__(self, index):
+		"""Get beatmap with a index."""
 		return self.beatmaps[index]
 
 	def __setitem__(self, index, beatmap):
+		"""Insert a beatmap in the list of beatmaps."""
 		if isinstance(beatmap, Beatmap):
 			self.beatmaps.insert(index, beatmap)
 		else:
 			raise TypeError("The value must be an instance of Beatmap")
 
 	def __delitem__(self, index):
+		"""Delete the beatmap with the index."""
 		del(self.beatmaps[index])
 
 	def __contains__(self, obj):
+		"""Return True if obj in the list of beatmaps."""
 		return obj in self.beatmaps
 
 	def append(self, beatmap):
@@ -95,7 +101,7 @@ class MusicOsu:
 		return self.beatmaps.pop(index=index)
 
 	def metadata(self):
-		return {k: v for k, v in self.__dict__().items()}
+		return {k: v for k, v in self.__dict__.items()}
 
 	def keys(self):
 		return self.__dict__.keys()
@@ -120,7 +126,10 @@ class MusicOsu:
 						self.artist = data['Artist']
 						first = False
 				beatmap = Beatmap.from_file(path)
-				self.beatmaps.append(beatmap) if beatmap.valid else self.errors.append(path)
+				if beatmap.valid:
+					self.beatmaps.append(beatmap)
+				else:
+					self.errors.append(path)
 		if len(self.errors) + len(self.beatmaps) > 0.:
 			self.ratio_error = len(self.errors) / (len(self.errors) + len(self.beatmaps))
 		else:

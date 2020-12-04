@@ -14,13 +14,13 @@ import info
 def menu_mode():
 	"""
 	A simple menu console to choose the action between:
-		1- read osu! folder and export datas in csv
-		2- read beatmaps of a folder and display datas
-		3- read a beatmap and display datas
-		4- stop the program
+		1- Read osu! folder and export datas in csv
+		2- Read osu! folder and export datas in excel
+		3- Read beatmaps of a folder and display datas
+		4- Read a beatmap and display datas.
+		5- Play the music of a osu folder
+		6- [Other answer] stop the program.Answer: 
 	"""
-
-	type_ = None
 
 	mode = input("What do you do ?"\
 		"\n\t1- Read osu! folder and export datas in csv"\
@@ -32,63 +32,60 @@ def menu_mode():
 
 	if mode == '1':
 		path = input("Path folder of your 'osu!' application: ")
-		type_ = input("Type data to export (metadata or hitobjects): ")
 		if not os.path.isdir(path):
 			Logs.error(f"The path given isn't a folder or it wasn't found ({path})")
-			path = ""
-			return 6, path, type_
-		elif type_.lower() not in ("metadata", "hitobjects"):
-			Logs.error(f"Option not valid: '{type_}'. Choose 'metadata' or 'hitobjects'")
-			return 6, path, type_
+			return 6, path
 
 	elif mode == '2':
 		path = input("Path folder of your 'osu!' application: ")
 		if not os.path.isdir(path):
 			Logs.error(f"The path given isn't a folder or it wasn't found ({path})")
-			path = ""
-			return 6, path, type_
+			return 6, path
 
 	elif mode == '3':
 		path = input("Path of folder: ")
 		if not os.path.isdir(path):
 			Logs.error(f"The path given isn't a folder or it wasn't found ({path})")
-			path = ""
-			return 6, path, type_
+			return 6, path
 
 	elif mode == '4':
 		path = input("Path of file '.osu': ")
 		if not path_beatmap.endswith('.osu'):
 			Logs.error(f"The file path isn't a beatmap ({path})!")
-			path == ""
-			return 6, path, type_
+			return 6, path
 	elif mode == '5':
 		path = input("Path of folder: ")
 		if not os.path.isdir(path):
 			Logs.error(f"The path given isn't a folder or it wasn't found ({path})")
-			path = ""
-			return 6, path, type_
+			return 6, path
 
 	else:
-		return 6, None, type_
+		return int(mode), None
 
-	return int(mode), path, type_
+	return int(mode), path
 
 if __name__ == "__main__":
-	mode, path, type_ = menu_mode()
+	mode, path = menu_mode()
 	if mode == 1:
-		export.osu_to_csv(path, data_type=type_)
+		csv_path = export.osu_to_csv(path)
+		Logs.info(f"csv file save in {os.path.abspath(csv_path)}")
 
 	elif mode == 2:
-		export.osu_to_excel(path)
+		excel_path = export.osu_to_excel(path)
+		Logs.info(f"Excel file save in {os.path.abspath(excel_path)}")
 
 	elif mode == 3:
-		excel_path = export.to_excel(path)
-		Logs.info(f"Excel file save in {excel_path}")
+		metadata, hitobjects, errors = export.from_folder(path)
+		print("metadata:\n", metadata, end='\n\n')
+		print("hitobjects:\n", hitobjects, end='\n\n')
+		print("errors:\n", errors)
 
 	elif mode == 4:
-		pass
+		valid, data = export.from_beatmap(path)
+		if not valid:
+			Logs.error("There is a error in this beatmap")
+		else:
+			print(data)
 
 	elif mode == 5:
 		info.play_music(path)
-
-	Logs.info('END\n---------------')
