@@ -20,7 +20,6 @@ class MusicOsu:
 		self.music_path = None
 		self.title = None
 		self.artist = None
-		self.time = 0
 		self.beatmaps = []
 		self.errors = []  # list of .osu file where a error was found.
 		self.ratio_error = 0.
@@ -33,57 +32,63 @@ class MusicOsu:
 		return self.__repr__()
 
 	def __len__(self):
-		return len(self.time)
+		"""Number of beatmaps."""
+		return len(self.beatmaps)
 
 	def __eq__(self, obj):
+		"""To compare 2 MusicOsu."""
 		if isinstance(obj, MusicOsu):
-			return self.time == obj.time
+			return len(self.beatmaps) == len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __ne__(self, obj):
 		if isinstance(obj, MusicOsu):
-			return self.time != obj.time
+			return len(self.beatmaps) != len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __gt__(self, obj):
 		if isinstance(obj, MusicOsu):
-			return self.time > obj.time
+			return len(self.beatmaps) > len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __ge__(self, obj):
 		if isinstance(obj, MusicOsu):
-			return self.time >= obj.time
+			return len(self.beatmaps) >= len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __lt__(self, obj):
 		if isinstance(obj, MusicOsu):
-			return self.time < obj.time
+			return len(self.beatmaps) < len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __le__(self, obj):
 		if isinstance(obj, MusicOsu):
-			return self.time <= obj.time
+			return len(self.beatmaps) <= len(obj.beatmaps)
 		else:
 			raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __getitem__(self, index):
+		"""Get beatmap with a index."""
 		return self.beatmaps[index]
 
 	def __setitem__(self, index, beatmap):
+		"""Insert a beatmap in the list of beatmaps."""
 		if isinstance(beatmap, Beatmap):
 			self.beatmaps.insert(index, beatmap)
 		else:
 			raise TypeError("The value must be an instance of Beatmap")
 
 	def __delitem__(self, index):
+		"""Delete the beatmap with the index."""
 		del(self.beatmaps[index])
 
 	def __contains__(self, obj):
+		"""Return True if obj in the list of beatmaps."""
 		return obj in self.beatmaps
 
 	def append(self, beatmap):
@@ -96,7 +101,7 @@ class MusicOsu:
 		return self.beatmaps.pop(index=index)
 
 	def metadata(self):
-		return {k: v for k, v in self.__dict__().items()}
+		return {k: v for k, v in self.__dict__.items()}
 
 	def keys(self):
 		return self.__dict__.keys()
@@ -107,54 +112,62 @@ class MusicOsu:
 	def load(self):
 		first = True
 		for name in os.listdir(self.folderpath):
-			path = os.path.isfile(os.path.join(self.folderpath, name))
-			if path and name.endswith((".osu", )):
+			path = os.path.join(self.folderpath, name)
+			if os.path.isfile(path) and name.endswith((".osu", )):
 				if first:
-					with open(path, 'r') as f:
+					with open(path, mode='r', encoding='utf8') as f:
 						lines = f.read().split('\n')
-						while '\n' in lines:
-							lines.remove('\n')
+						while '' in lines:
+							lines.remove('')
 					valid, data = load_beatmap(path, lines)
 					if valid:
-						self.music_path = lines[...]
+						self.music_path = lines[2][lines[2].find(" ")+1:]
 						self.title = data['title']
 						self.artist = data['Artist']
 						first = False
-
 				beatmap = Beatmap.from_file(path)
-				self.beatmaps.append(beatmap) if beatmap.valid else self.errors.append(path)
-
-		rate, audData = self.data_music()
-		self.time = audData.shape[0] / rate
+				if beatmap.valid:
+					self.beatmaps.append(beatmap)
+				else:
+					self.errors.append(path)
 		if len(self.errors) + len(self.beatmaps) > 0.:
 			self.ratio_error = len(self.errors) / (len(self.errors) + len(self.beatmaps))
 		else:
 			self.ratio_error = 1.  # 100% error because there isn't beatmaps
 
 	def to_dataframe(self):
-		df pd.concat(self.beatmaps, axis=1)
-		df['Artist'] = self.artist
+		if len(self.beatmaps) > 0:
+			df = pd.concat([beatmap.to_dataframe() for beatmap in self.beatmaps], axis=0).reset_index(drop=True)
+			df['Artist'] = self.artist
+		else:
+			df = pd.DataFrame(columns=['version_fmt', 'title', 'Creator', 'DifficultyName', 'HP', 'CS', 'OD', 'AR', 'time'])	
 		return df
 
 	def dataframe_hitobjects(self):
-		return pd.concat([beatmap.dataframe_hitobjects for beatmap in self.beatmaps], axis=1)
-	
+		if len(self.beatmaps) > 0:
+			return pd.concat([beatmap.hitobjects_data for beatmap in self.beatmaps], axis=0).reset_index(drop=True)
+		else:
+			return pd.DataFrame(columns=['X', 'Y', 'time', 'type'])
+
 	def to_csv(self, path: str = None):
 		return self.to_dataframe().to_csv(path, sep='$')
 
-	def to_excel(self, path: str = None, sheet_name=self.title):
+	def to_excel(self, path: str = None, sheet_name=''):
+		sheet_name = self.title if sheet_name == '' else sheet_name
 		return self.to_dataframe().to_excel(path, sheet_name=sheet_name)
 
 	def mp3_object(self):
-		return pydub.AudioSegment.from_mp3(self.music_path)
+		return pydub.AudioSegment.from_mp3(os.path.join(self.folderpath, self.music_path))
 
-	def to_wav(self, folderpath: str):
-		path = os.path.join(folderpath, self.title+'.wav')
+	def to_wav(self, name='music_wav'):
+		path = os.path.join(self.folderpath, name+'.wav')
 		self.mp3_object().export(path, format="wav")
 		return path
 
 	def data_music(self):
-		rate, audData = wavfile.read(self.to_wav())
+		path = self.to_wav()
+		rate, audData = wavfile.read(path)
+		os.remove(path)
 		return rate, audData
 
 	def music_to_dataframe(self):

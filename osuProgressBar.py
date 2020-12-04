@@ -6,7 +6,7 @@ import sys
 def progress_bar(iteration, total, start=0, info='', suffix='', length=75, fill='█'):
 	del_last_line = '\x1b[1A\x1b[2K'
 	if iteration > start:
-		sys.stdout.write(del_last_line if info == '' else del_last_line*3)
+		sys.stdout.write(del_last_line*2 if info == '' else del_last_line*2)
 
 	percent = str(round(100*(iteration+1)/total, ndigits=3))
 	filled_length = int(length * (iteration+1) // total)
