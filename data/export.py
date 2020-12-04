@@ -11,11 +11,11 @@ import numpy as np
 import pandas as pd
 import pydub
 
-from logs import Logs
-from osuProgressBar import progress_bar
-from beatmap import Beatmap
-from musicOsu import MusicOsu
-from beatmapError import BeatmapError
+from utility.logs import Logs
+from utility.osuProgressBar import progress_bar
+from osuDataClass.beatmap import Beatmap
+from osuDataClass.musicOsu import MusicOsu
+from osuDataClass.beatmapError import BeatmapError
 
 
 def to_csv(folderpath: str, csv_path: str = ''):
