@@ -11,7 +11,7 @@ from scipy.io import wavfile
 import pydub
 from pydub.playback import play
 
-from beatmap import Beatmap, load_beatmap
+from osuDataClass.beatmap import Beatmap, load_beatmap
 
 
 class MusicOsu:

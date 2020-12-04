@@ -6,9 +6,9 @@ Author: LostPy
 
 import os
 
-from logs import Logs
-import export
-import info
+from utility.logs import Logs
+import data.export
+import data.info
 
 
 def menu_mode():
