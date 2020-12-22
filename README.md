@@ -12,20 +12,20 @@ You can use `export` and `info` modules to work without object-oriented programm
  2. [Installation](#installation)
 
  3. [Documentation](#documentation)
-   * [Structure](#structure)
+    * [Structure](#structure)
 
-   * [Basic use](#basicUse)
-     * [Command line](#commandLine)
-     * [Export](#export)
-     * [Info](#info)
+    * [Basic use](#basicUse)
+      * [Command line](#commandLine)
+      * [Export](#export)
+      * [Info](#info)
  
-   * [Advanced use](#advancedUse)
-     * [Beatmap](#beatmap)
-     * [MusicOsu](#musicOsu)
+    * [Advanced use](#advancedUse)
+      * [Beatmap](#beatmap)
+      * [MusicOsu](#musicOsu)
 
  4. [Table of functions](#tableFunctions)
-   * [Functions](#tableFunctions1)
-   * [Methods class](#tableFunctions2)
+    * [Functions](#tableFunctions1)
+    * [Methods class](#tableFunctions2)
 
 
 ## Global informations <a id="globalInfos"></a>
