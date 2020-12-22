@@ -259,7 +259,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
       express.version_fmt(df)
     ```
     A distribution example for version_format
-    [![date_add exemple](example/example-version_fmt.png)](example/example-version_fm.html)
+    ![date_add exemple](example/example-version_fmt.png)
 
   * `info.difficulties` <a id="Difficulties"></a>
 
@@ -279,7 +279,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
       df, errors = express.from_osu('C:/osu!/')
       express.date_add(df)
     ```
-    [![date_add exemple](example/example-date_add.png)](example/example-date_add.html)
+    ![date_add exemple](example/example-date_add.png)]
 
   * `info.beatmap_data` <a id="beatmapData"></a>
 
