@@ -37,9 +37,9 @@ You can use `export` and `info` modules to work without object-oriented programm
 
   * Version: 1.0
   
-  * License: [Creative Commons Legal Code][license]
+  * License: [MIT License][license]
 
-  * requirements:
+  * requirements: <a id="requirements"></a>
     * [Python 3.x][py]
     * [colorama][color] (for logs, you can replace logs by print)
     * [pydub][pydub]
@@ -57,6 +57,8 @@ You can use `export` and `info` modules to work without object-oriented programm
 To install this package, you can use the following command:
 
 `pip install git+https://github.com/LostPy/OsuData.git@main`
+
+**Don't forget to install [dependencies](#requirements).**
 
 ## Features <a id="features"></a>
 ### Completed <a id="completed"></a>
@@ -757,23 +759,25 @@ Attribute name | Type | Description | Default value
 ## Index
   1. [Global informations](#globalInfos)
 
-  2. [Features](#features)
+  2. [Installation](#installation)
+
+  3. [Features](#features)
       * [Completed](#completed)
       * [Coming soon](#comingSoon)
 
-  3. [Documentation](#documentation)
+  4. [Documentation](#documentation)
       * [Structure](#structure)
 
       * [Basic use](#basicUse)
         * [Command line](#commandLine)
         * [Export](#export)
         * [Info](#info)
-
+    
       * [Advanced use](#advancedUse)
         * [Beatmap](#beatmap)
         * [MusicOsu](#musicOsu)
 
-  4. [Table of functions](#tableFunctions)
+  5. [Table of functions](#tableFunctions)
       * [Functions](#tableFunctions1)
       * [Methods class](#tableFunctions2)
 
