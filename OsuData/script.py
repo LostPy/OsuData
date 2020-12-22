@@ -6,6 +6,9 @@ Author: LostPy
 
 import os
 
+if not __name__ == "__main__":
+	from .utility import Logs
+
 
 def menu_mode():
 	"""
@@ -61,8 +64,8 @@ def menu_mode():
 	return int(mode), path
 
 if __name__ == "__main__":
-	from utility import Logs
 	from express import osu_to_csv, osu_to_excel, from_beatmap, from_folder, play_music
+	from utility import Logs
 
 	mode, path = menu_mode()
 	if mode == 1:
