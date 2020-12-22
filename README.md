@@ -11,11 +11,7 @@ You can use `export` and `info` modules to work without object-oriented programm
 
  2. [Installation](#installation)
 
- 3. [Features](#features)
-   * [Completed](#completed)
-   * [Coming soon](#comingSoon)
-
- 4. [Documentation](#documentation)
+ 3. [Documentation](#documentation)
    * [Structure](#structure)
 
    * [Basic use](#basicUse)
@@ -27,7 +23,7 @@ You can use `export` and `info` modules to work without object-oriented programm
      * [Beatmap](#beatmap)
      * [MusicOsu](#musicOsu)
 
- 5. [Table of functions](#tableFunctions)
+ 4. [Table of functions](#tableFunctions)
    * [Functions](#tableFunctions1)
    * [Methods class](#tableFunctions2)
 
@@ -61,29 +57,6 @@ To install this package, you can use the following command:
 
 **Don't forget to install [dependencies](#requirements).**
 
-## Features <a id="features"></a>
-### Completed <a id="completed"></a>
- * Base Features
-   * Read beatmaps data
-   * Read music data
-   * Export data in a csv or a excel file
- 
- * Stats Graphs
-   * Stats version_fmt
-   * Stats date add
-
- * Other
-   * Play the music of a osu beatmaps folder
-
-### Coming soon <a id="commingSoon"></a>
- * Base Features
-
- * Stats Graphs
-   * Stats difficulties (HP, OD, CS, AR)
-   * Number of beatmaps in function of time
-   * Stats of an Artist
-   * Stats of a Creator
-   * Stats of time beatmaps
 
 ## Documentation <a id="documentation"></a>
 ### Structure <a id="structure"></a>
@@ -762,11 +735,7 @@ Attribute name | Type | Description | Default value
 
  2. [Installation](#installation)
 
- 3. [Features](#features)
-   * [Completed](#completed)
-   * [Coming soon](#comingSoon)
-
- 4. [Documentation](#documentation)
+ 3. [Documentation](#documentation)
    * [Structure](#structure)
 
    * [Basic use](#basicUse)
@@ -778,7 +747,7 @@ Attribute name | Type | Description | Default value
      * [Beatmap](#beatmap)
      * [MusicOsu](#musicOsu)
 
- 5. [Table of functions](#tableFunctions)
+ 4. [Table of functions](#tableFunctions)
    * [Functions](#tableFunctions1)
    * [Methods class](#tableFunctions2)
 
