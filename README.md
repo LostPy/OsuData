@@ -1,4 +1,5 @@
 # OsuData
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f48258e18c3c4a93a7f65b51206e0b88)](https://app.codacy.com/gh/LostPy/OsuData?utm_source=github.com&utm_medium=referral&utm_content=LostPy/OsuData&utm_campaign=Badge_Grade)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f48258e18c3c4a93a7f65b51206e0b88)](https://app.codacy.com/gh/LostPy/OsuData?utm_source=github.com&utm_medium=referral&utm_content=LostPy/OsuData&utm_campaign=Badge_Grade)
 
