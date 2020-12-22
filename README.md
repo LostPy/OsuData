@@ -51,6 +51,7 @@ You can use `export` and `info` modules to work without object-oriented programm
   * Utility link:
     * [osu! .osu file format][osu_format]
     * [osu! .db file format][osu_db_format]
+    * [Wiki](https://github.com/LostPy/OsuData/wiki)
 
 
 ## Installation
