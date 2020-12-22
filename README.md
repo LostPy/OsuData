@@ -29,7 +29,7 @@ You can use `export` and `info` modules to work without object-oriented programm
 
 
 ## Global informations <a id="globalInfos"></a>
- * Author: LostPy
+ * Author: [LostPy][me]
 
  * Version: 1.0
  
@@ -245,7 +245,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      express.version_fmt(df)
    ```
    A distribution example for version_format
-   ![date_add exemple](example/example-version_fmt.png)
+   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/OsuData/example/example-version_fmt.png)
 
  * `info.difficulties` <a id="Difficulties"></a>
 
@@ -265,7 +265,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      df, errors = express.from_osu('C:/osu!/')
      express.date_add(df)
    ```
-   ![date_add exemple](example/example-date_add.png)]
+   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/OsuData/example/example-date_add.png)]
 
  * `info.beatmap_data` <a id="beatmapData"></a>
 
@@ -769,3 +769,4 @@ Attribute name | Type | Description | Default value
 [hit-objects]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29#hit-objects
 [osu_db_format]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Db_%28file_format%29
 [license]: https://github.com/LostPy/OsuData/blob/main/LICENSE
+[me]: https://osu.ppy.sh/users/11187592
