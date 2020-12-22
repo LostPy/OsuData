@@ -22,11 +22,11 @@ setup(
 	classifiers=[
         "Programming Language :: Python",
         "Development Status :: 1 - In progress",
-        "License :: CC0-1.0 License",
+        "License :: MIT",
         "Natural Language :: French",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.5+",
         "Topic :: osu!",
     ],
-    license='CC0-1.0 License'
+    license='MIT'
     )
