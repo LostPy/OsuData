@@ -1,5 +1,5 @@
 """
-Project: OsuDatas
+Project: OsuData
 
 Author: LostPy
 """
@@ -7,16 +7,17 @@ Author: LostPy
 import os
 import time
 
-import numpy as np
 import pandas as pd
 import pydub
 
-from utility.logs import Logs
-from utility.osuProgressBar import progress_bar
-from osuDataClass.beatmap import Beatmap
-from osuDataClass.musicOsu import MusicOsu
-from osuDataClass.beatmapError import BeatmapError
-
+try:
+	from ..utility import Logs, progress_bar
+	from ..osuDataClass import Beatmap, MusicOsu
+	from ..osuDataClass.beatmapError import BeatmapError
+except ValueError:  # When script.py is the __main__
+	from utility import Logs, progress_bar
+	from osuDataClass import Beatmap, MusicOsu
+	from osuDataClass.beatmapError import BeatmapError
 
 def to_csv(folderpath: str, csv_path: str = ''):
 	musicosu = MusicOsu.from_folder(folderpath)
@@ -92,7 +93,7 @@ def from_beatmap(filepath: str):
 	if beatmap.valid:
 		return True, beatmap.to_dataframe()
 	else:
-		return False, beatmap.path
+		return False, beatmap.path  # return the path of beatmap if there is a error in import.
 
 
 def from_folder(folderpath: str):
@@ -119,7 +120,7 @@ def osu_to_csv(osu_path: str, csv_path:str = '', display_progress=True):
 	metadata, errors = from_osu(osu_path, display_progress)
 	Logs.info("the csv file is being created...")
 	csv_path = './osu_data.csv' if csv_path == '' else csv_path
-	metadata.to_csv(csv_path, sep='$')
+	metadata.to_csv(csv_path, sep='$', index=False)
 
 	if len(errors) > 0:
 		Logs.warning(f'There is a error or more was found in these files: {errors}')
@@ -135,7 +136,7 @@ def osu_to_excel(osu_path: str, excel_path: str = '', display_progress=True, **k
 	excel_path = './osu_data.xlsx' if excel_path == '' else excel_path
 	with pd.ExcelWriter(excel_path, mode=mode) as writer:
 		Logs.info("the 'metadata' sheet is being created...")
-		metadata[:1048576].to_excel(writer, sheet_name='metadata', **kwargs)
+		metadata[:1048576].to_excel(writer, sheet_name='metadata', index=False, **kwargs)
 
 	if metadata.shape[0] > 1048576:
 		Logs.warning(f'The sheet "metadata" is too large ({metadata.shape[0]} lines), the maximum size has been keeping (1048576)')

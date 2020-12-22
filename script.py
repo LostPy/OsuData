@@ -1,14 +1,10 @@
 """
-Project: OsuDatas
+Project: OsuData
 
 Author: LostPy
 """
 
 import os
-
-from utility.logs import Logs
-import data.export
-import data.info
 
 
 def menu_mode():
@@ -19,10 +15,10 @@ def menu_mode():
 		3- Read beatmaps of a folder and display datas
 		4- Read a beatmap and display datas.
 		5- Play the music of a osu folder
-		6- [Other answer] stop the program.Answer: 
+		6- [Other answer] stop the program.Answer:
 	"""
 
-	mode = input("What do you do ?"\
+	mode = input("What do you want to do ?"\
 		"\n\t1- Read osu! folder and export datas in csv"\
 		"\n\t2- Read osu! folder and export datas in excel"\
 		"\n\t3- Read beatmaps of a folder and display datas"\
@@ -50,7 +46,7 @@ def menu_mode():
 
 	elif mode == '4':
 		path = input("Path of file '.osu': ")
-		if not path_beatmap.endswith('.osu'):
+		if not path.endswith('.osu'):
 			Logs.error(f"The file path isn't a beatmap ({path})!")
 			return 6, path
 	elif mode == '5':
@@ -60,32 +56,35 @@ def menu_mode():
 			return 6, path
 
 	else:
-		return int(mode), None
+		return 6, None
 
 	return int(mode), path
 
 if __name__ == "__main__":
+	from utility import Logs
+	from express import osu_to_csv, osu_to_excel, from_beatmap, from_folder, play_music
+
 	mode, path = menu_mode()
 	if mode == 1:
-		csv_path = export.osu_to_csv(path)
+		csv_path = osu_to_csv(path)
 		Logs.info(f"csv file save in {os.path.abspath(csv_path)}")
 
 	elif mode == 2:
-		excel_path = export.osu_to_excel(path)
+		excel_path = osu_to_excel(path)
 		Logs.info(f"Excel file save in {os.path.abspath(excel_path)}")
 
 	elif mode == 3:
-		metadata, hitobjects, errors = export.from_folder(path)
+		metadata, hitobjects, errors = from_folder(path)
 		print("metadata:\n", metadata, end='\n\n')
 		print("hitobjects:\n", hitobjects, end='\n\n')
 		print("errors:\n", errors)
 
 	elif mode == 4:
-		valid, data = export.from_beatmap(path)
+		valid, data = from_beatmap(path)
 		if not valid:
 			Logs.error("There is a error in this beatmap")
 		else:
 			print(data)
 
 	elif mode == 5:
-		info.play_music(path)
+		play_music(path)

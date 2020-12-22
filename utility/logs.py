@@ -1,5 +1,5 @@
 """
-Project: discord Bot "Stats Bot"
+Project: OsuData
 
 Author: LostPy
 """
