@@ -1,6 +1,6 @@
 # OsuData
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f48258e18c3c4a93a7f65b51206e0b88)](https://app.codacy.com/gh/LostPy/OsuData?utm_source=github.com&utm_medium=referral&utm_content=LostPy/OsuData&utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f48258e18c3c4a93a7f65b51206e0b88)](https://app.codacy.com/gh/LostPy/OsuData?utm_source=github.com&utm_medium=referral&utm_content=LostPy/OsuData&utm_campaign=Badge_Grade) [![CodeFactor](https://www.codefactor.io/repository/github/lostpy/osudata/badge)](https://www.codefactor.io/repository/github/lostpy/osudata)
 
 A small framework to work or vizualise osu! beatmaps data.
 This framework use object-oriented programming (OOP) to easily manage beatmap data.
