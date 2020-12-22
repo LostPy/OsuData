@@ -9,11 +9,13 @@ You can use `export` and `info` modules to work without object-oriented programm
 ## Index <a id="index"></a>
   1. [Global informations](#globalInfos)
 
-  2. [Features](#features)
+  2. [Installation](#installation)
+
+  3. [Features](#features)
       * [Completed](#completed)
       * [Coming soon](#comingSoon)
 
-  3. [Documentation](#documentation)
+  4. [Documentation](#documentation)
       * [Structure](#structure)
 
       * [Basic use](#basicUse)
@@ -25,7 +27,7 @@ You can use `export` and `info` modules to work without object-oriented programm
         * [Beatmap](#beatmap)
         * [MusicOsu](#musicOsu)
 
-  4. [Table of functions](#tableFunctions)
+  5. [Table of functions](#tableFunctions)
       * [Functions](#tableFunctions1)
       * [Methods class](#tableFunctions2)
 
@@ -35,19 +37,26 @@ You can use `export` and `info` modules to work without object-oriented programm
 
   * Version: 1.0
   
-  * statement: in progress...
+  * License: [Creative Commons Legal Code][license]
 
   * requirements:
     * [Python 3.x][py]
     * [colorama][color] (for logs, you can replace logs by print)
     * [pydub][pydub]
     * [numpy][np]
+    * [scipy][scipy]
     * [pandas][pd]
     * [plotly][plotly]
 
   * Utility link:
     * [osu! .osu file format][osu_format]
     * [osu! .db file format][osu_db_format]
+
+
+## Installation
+To install this package, you can use the following command:
+
+`pip install git+https://github.com/LostPy/OsuData.git@main`
 
 ## Features <a id="features"></a>
 ### Completed <a id="completed"></a>
@@ -773,6 +782,7 @@ Attribute name | Type | Description | Default value
 [color]: https://pypi.org/project/colorama/
 [pydub]: https://github.com/jiaaro/pydub
 [np]: https://numpy.org/
+[scipy]: https://www.scipy.org/docs.html
 [pd]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_excel.html?highlight=to_excel#pandas.DataFrame.to_excel
 [pdDf]: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
 [pdToExcel]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_excel.html
@@ -784,3 +794,4 @@ Attribute name | Type | Description | Default value
 [difficulty]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29#difficulty
 [hit-objects]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29#hit-objects
 [osu_db_format]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Db_%28file_format%29
+[license]: https://github.com/LostPy/OsuData/blob/main/LICENSE
