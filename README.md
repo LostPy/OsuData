@@ -29,7 +29,7 @@ You can use `export` and `info` modules to work without object-oriented programm
 
 
 ## Global informations <a id="globalInfos"></a>
- * Author: LostPy
+ * Author: [LostPy][me]
 
  * Version: 1.0
  
@@ -769,3 +769,4 @@ Attribute name | Type | Description | Default value
 [hit-objects]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29#hit-objects
 [osu_db_format]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Db_%28file_format%29
 [license]: https://github.com/LostPy/OsuData/blob/main/LICENSE
+[me]: https://osu.ppy.sh/users/11187592
