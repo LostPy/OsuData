@@ -252,7 +252,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      express.version_fmt(df)
    ```
    A distribution example for version_format
-   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/OsuData/example/example-version_fmt.png)
+   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/example/example-version_fmt.png)
 
  * `info.difficulties` <a id="Difficulties"></a>
 
@@ -272,7 +272,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      df, errors = express.from_osu('C:/osu!/')
      express.date_add(df)
    ```
-   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/OsuData/example/example-date_add.png)
+   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/example/example-date_add.png)
 
  * `info.beatmap_data` <a id="beatmapData"></a>
 
