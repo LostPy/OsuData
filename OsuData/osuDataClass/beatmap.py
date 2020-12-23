@@ -90,43 +90,43 @@ class Beatmap:
 		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars == obj.stars
-		else:
-			raise TypeError("You can't compare an instance of Beatmap with another object")
+
+		raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def __ne__(self, obj):
 		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars != obj.stars
-		else:
-			raise TypeError("You can't compare an instance of Beatmap with another object")
+
+		raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def __gt__(self, obj):
 		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars > obj.stars
-		else:
-			raise TypeError("You can't compare an instance of Beatmap with another object")
+
+		raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def __ge__(self, obj):
 		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars >= obj.stars
-		else:
-			raise TypeError("You can't compare an instance of Beatmap with another object")
+
+		raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def __lt__(self, obj):
 		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars < obj.stars
-		else:
-			raise TypeError("You can't compare an instance of Beatmap with another object")
+
+		raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def __le__(self, obj):
 		"""Compare the difficulty."""
 		if isinstance(obj, Beatmap):
 			return self.stars <= obj.stars
-		else:
-			raise TypeError("You can't compare an instance of Beatmap with another object")
+
+		raise TypeError("You can't compare an instance of Beatmap with another object")
 
 	def metadata(self):
 		"""Return a dict with metadata of beatmaps."""

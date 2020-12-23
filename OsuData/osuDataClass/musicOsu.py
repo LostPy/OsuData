@@ -42,43 +42,43 @@ class MusicOsu:
 		"""Compare with the number of beatmaps."""
 		if isinstance(obj, MusicOsu):
 			return len(self.beatmaps) == len(obj.beatmaps)
-		else:
-			raise TypeError("You can't compare an instance of MusicOsu with another object")
+
+		raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __ne__(self, obj):
 		"""Compare with the number of beatmaps."""
 		if isinstance(obj, MusicOsu):
 			return len(self.beatmaps) != len(obj.beatmaps)
-		else:
-			raise TypeError("You can't compare an instance of MusicOsu with another object")
+
+		raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __gt__(self, obj):
 		"""Compare with the number of beatmaps."""
 		if isinstance(obj, MusicOsu):
 			return len(self.beatmaps) > len(obj.beatmaps)
-		else:
-			raise TypeError("You can't compare an instance of MusicOsu with another object")
+
+		raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __ge__(self, obj):
 		"""Compare with the number of beatmaps."""
 		if isinstance(obj, MusicOsu):
 			return len(self.beatmaps) >= len(obj.beatmaps)
-		else:
-			raise TypeError("You can't compare an instance of MusicOsu with another object")
+
+		raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __lt__(self, obj):
 		"""Compare with the number of beatmaps."""
 		if isinstance(obj, MusicOsu):
 			return len(self.beatmaps) < len(obj.beatmaps)
-		else:
-			raise TypeError("You can't compare an instance of MusicOsu with another object")
+
+		raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __le__(self, obj):
 		"""Compare with the number of beatmaps."""
 		if isinstance(obj, MusicOsu):
 			return len(self.beatmaps) <= len(obj.beatmaps)
-		else:
-			raise TypeError("You can't compare an instance of MusicOsu with another object")
+
+		raise TypeError("You can't compare an instance of MusicOsu with another object")
 
 	def __getitem__(self, index):
 		"""Get beatmap with a index."""
@@ -88,8 +88,8 @@ class MusicOsu:
 		"""Insert a beatmap in the list of beatmaps."""
 		if isinstance(beatmap, Beatmap):
 			self.beatmaps.insert(index, beatmap)
-		else:
-			raise TypeError("The value must be an instance of Beatmap")
+
+		raise TypeError("The value must be an instance of Beatmap")
 
 	def __delitem__(self, index):
 		"""Delete the beatmap with the index."""
@@ -103,8 +103,8 @@ class MusicOsu:
 		"""Append beatmap in the list of beatmaps."""
 		if isinstance(beatmap, Beatmap):
 			self.beatmaps.append(beatmap)
-		else:
-			raise TypeError("The value must be an instance of Beatmap")
+
+		raise TypeError("The value must be an instance of Beatmap")
 
 	def pop(self, index=-1):
 		"""Use pop method on the list of beatmaps."""
@@ -172,8 +172,8 @@ class MusicOsu:
 		"""Return a DataFrame with hitobjects of all beatmaps from MusicOsu object."""
 		if len(self.beatmaps) > 0:
 			return pd.concat([beatmap.hitobjects_data for beatmap in self.beatmaps], axis=0).reset_index(drop=True)
-		else:
-			return pd.DataFrame(columns=['X', 'Y', 'time', 'type', 'objectParams'])
+
+		return pd.DataFrame(columns=['X', 'Y', 'time', 'type', 'objectParams'])
 
 	def to_csv(self, path: str = None):
 		"""Export MusicOsu object in a csv file."""

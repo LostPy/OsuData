@@ -25,8 +25,8 @@ def to_csv(folderpath: str, csv_path: str = ''):
 		csv_path = f'./{musicosu.title}.csv' if csv_path == '' else csv_path
 		musicosu.to_csv(csv_path)
 		return csv_path
-	else:
-		raise BeatmapError(f"There isn't beatmap in the folder: '{folderpath}', or one error was found in all beatmaps")
+
+	raise BeatmapError(f"There isn't beatmap in the folder: '{folderpath}', or one error was found in all beatmaps")
 
 
 def to_excel(folderpath: str, excel_path: str = '', *args, **kwargs):
@@ -44,8 +44,7 @@ def to_excel(folderpath: str, excel_path: str = '', *args, **kwargs):
 				df.to_excel(writer, sheet_name=name, *args, **kwargs)  # à verifier
 		return excel_path
 
-	else:
-		raise BeatmapError(f"There isn't beatmap in the folder: '{folderpath}', or one error was found in all beatmaps")
+	raise BeatmapError(f"There isn't beatmap in the folder: '{folderpath}', or one error was found in all beatmaps")
 
 
 def mp3_to_wav(mp3_path: str, wav_path: str = ''):
@@ -92,8 +91,8 @@ def from_beatmap(filepath: str):
 	beatmap = Beatmap.from_file(filepath)
 	if beatmap.valid:
 		return True, beatmap.to_dataframe()
-	else:
-		return False, beatmap.path  # return the path of beatmap if there is a error in import.
+
+	return False, beatmap.path  # return the path of beatmap if there is a error in import.
 
 
 def from_folder(folderpath: str):
