@@ -58,7 +58,7 @@ To install this package, you can use the following command:
 **Don't forget to install [dependencies](#requirements).**
 
 **To update** the package, you can use:
-`pip install git+https://github.com/LostPy/OsuData.git@main --upgrade`
+`pip install git+https://github.com/LostPy/OsuData.git@main --upgrade`  
 
 OR
 
