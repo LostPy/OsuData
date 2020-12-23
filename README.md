@@ -265,7 +265,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      df, errors = express.from_osu('C:/osu!/')
      express.date_add(df)
    ```
-   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/OsuData/example/example-date_add.png)]
+   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/OsuData/example/example-date_add.png)
 
  * `info.beatmap_data` <a id="beatmapData"></a>
 
@@ -289,7 +289,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    ```
 
 ### Advanced use <a id="advancedUse"></a>
-Use the OOP to work with beatmap or music folder (group of beatmap with a music) like objects.
+Use the OOP to work with beatmap or music folder (group of beatmap with a music) like objects.  
 To easily create a Beatmap object or a MusicOsu object, use :
 ```py
 from OsuData.osuDataClass import Beatmap, MusicOsu
@@ -342,8 +342,8 @@ Attribute name | Type | Description | Default value
    * **Description:** Initialize [metadata][metadata] (attributes) of the beatmap.
 
    * **Arguments:**
-     (`lines`): *list*, default: None - List of line (*str*) of beatmap file whithout `\n` char
-     (`hitobjects`): *bool*, default: True - if `True` initalize also `hitobjects_data` attribute.
+     * (`lines`): *list*, default: None - List of line (*str*) of beatmap file whithout `\n` char.
+     * (`hitobjects`): *bool*, default: True - if `True` initalize also `hitobjects_data` attribute.
 
    * **Return:** none
 
@@ -358,7 +358,7 @@ Attribute name | Type | Description | Default value
    * **Description:** Initialize `hitobjects_data` attribute.
 
    * **Arguments:**
-     * (`lines`): *list*, default: None - List of line (*str*) of beatmap file whithout `\n` char
+     * (`lines`): *list*, default: None - List of line (*str*) of beatmap file whithout `\n` char.
    
    * **Return:** none
 
@@ -416,7 +416,7 @@ Attribute name | Type | Description | Default value
 `music_path` | *str* | The path of mp3 file | None
 `title` | *str* | [Title][metadata] of music/beatmaps | None
 `artist` | *str* | The [artist name][metadata] of the music| None
-`beatmaps` | *list* | The list of `Beatmap` objects| [ ]
+`beatmaps` | *list* | The list of [`Beatmap` objects](#beatmap)| [ ]
 `errors` | *list* | The list of beatmap path (str) where there is a error in beatmap file| [ ]
 `ratio_error` | *float* | The error rate in this folder (1. = all beatmap files have a error)| 0.
 `date_add` | *datetime.Datetime* | The date of creation of the folder | None
@@ -425,7 +425,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.append`  <a id="musicOsuAppend"></a>
    * **Description:** Add a [beatmap][#beatmap] in the list of beatmaps.
 
-   * **Atributes:**
+   * **Arguments:**
      * `beatmap`: *Beatmap* - The [beatmap](#beatmap) to add
 
    * **Return:** none
@@ -441,7 +441,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.pop`  <a id="musicOsuPop"></a>
    * **Description:** Delete and return a [beatmap](#beatmap)
 
-   * **Atributes:**
+   * **Arguments:**
      * `index`: *int*, default `-1` - Index of [beatmap](#beatmap) to delete.
 
    * **Return:** `Beatmap` - The [beatmap](#beatmap) instance delete.
@@ -456,7 +456,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.metadata`  <a id="musicOsuMetadata"></a>
    * **Description:** Return metadata of MusicOsu instance in a dictionary
 
-   * **Atributes:** none
+   * **Arguments:** none
 
    * **Return:** *dict* - A dictionary with metadata of MusicOsu instance.
 
@@ -470,7 +470,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.keys`  <a id="musicOsuKeys"></a>
    * **Description:** Return Attributes name of MusicOsu object
 
-   * **Atributes:** none
+   * **Arguments:** none
 
    * **Return:** *list* - List of attributes names (*str*).
 
@@ -484,7 +484,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.values`  <a id="musicOsuValues"></a>
    * **Description:** Return Attributes value of MusicOsu object
 
-   * **Atributes:** none
+   * **Arguments:** none
 
    * **Return:** *list* - List of attributes value.
 
@@ -498,7 +498,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.items`  <a id="musicOsuItems"></a>
    * **Description:** Return tuples with first index the key and the second index the value.
 
-   * **Atributes:** none
+   * **Arguments:** none
 
    * **Return:** *list* - List of tuple with a couple `(key, value)`
 
@@ -512,7 +512,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.load`  <a id="musicOsuLoad"></a>
    * **Description:** Initialize the MusicOsu instance by loading the [beatmaps](#beatmap) of the folder. 
 
-   * **Atributes:**
+   * **Arguments:**
      * (`modes`): *list*, default `[0, 1, 2, 3]` - List of int wich represent [beatmap modes][metadata] to load
 
    * **Return:** none
@@ -527,7 +527,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.to_dataframe`  <a id="musicOsuToDataframe"></a>
    * **Description:** Export MusicOsu object in a `pandas.DataFrame`
 
-   * **Atributes:** none
+   * **Arguments:** none
 
    * **Return:** *pandas.DataFrame* - The dataframe with all [beatmaps](#beatmap) [metadata][metadata].
 
@@ -541,7 +541,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.dataframe_hitobjects`  <a id="musicOsuDataFrameHitobjects"></a>
    * **Description:** Export [hit-objects][hit-objects] data of all [beatmaps](#beatmap) of MusicOsu object in a `pandas.DataFrame`
 
-   * **Atributes:** none
+   * **Arguments:** none
 
    * **Return:** *pandas.DataFrame* - The dataframe of [hit-objects][hit-objects] data
 
@@ -555,7 +555,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.to_csv`  <a id="musicOsuToCsv"></a>
    * **Description:** Export all [beatmaps](#beatmap) [metadata][metadata] of MusicOsu object in a csv file.
 
-   * **Atributes:**
+   * **Arguments:**
      * (`path`): *str*, default `None` - Path where the csv file is save, by default, it's in current path.
 
    * **Return:** *str* - the path where the file is save.
@@ -570,7 +570,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.to_excel`  <a id="musicOsuToExcel"></a>
    * **Description:** Like `to_csv` method but export in a xlsx file.
 
-   * **Atributes:**
+   * **Arguments:**
      * (`path`): *str*, default `None` - Path where the xlsx file is save, by default, it's in current path.
      * (`sheetname`): *str*, default `''` - The name of sheet to create in xlsx file.
      * (Other arguments): You can use keywords arguments to pass at `to_excel` function of [pandas][pdToExcel].
@@ -587,7 +587,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.mp3_object`  <a id="musicOsuMp3Object"></a>
    * **Description:** Load the mp3 file of MusicOsu instance in a `pydub.MP3` instance.
 
-   * **Atributes:** none
+   * **Arguments:** none
 
    * **Return:** *pydub.MP3* - The [mp3 instance][pydub] of the mp3 file of MusicOsu.
 
@@ -601,7 +601,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.to_wav`  <a id="musicOsuToWav"></a>
    * **Description:** Export the mp3 file in a wav file.
 
-   * **Atributes:**
+   * **Arguments:**
      * `name`: *str*, default `audio_wav` - The name of wav file.
 
    * **Return:** *str* - The path where the wav file is save (The folder of MusicOsu instance).
@@ -616,7 +616,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.data_music`  <a id="musicOsuDataMusic"></a>
    * **Description:** Extract audio data of the mp3 file.
 
-   * **Atributes:** none
+   * **Arguments:** none
 
    * **Return:** (*int*, *list*) - The [rate and AudioData][pydub] from mp3 file.
 
@@ -630,7 +630,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.music_to_dataframe`  <a id="musicOsuMusicToDataframe"></a>
    * **Description:** Export mp3 file from MusicOsu instance in a [`pandas.DataFrame`][pdDf].
 
-   * **Atributes:** none
+   * **Arguments:** none
 
    * **Return:** *pandas.DataFrame* - The dataframe of mp3 file data, with 2 columns [L, R]
 
@@ -644,7 +644,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.play_music` <a id="musicOsuPlay"></a>
    * **Description:** A method to play the music of MusicOsu instance.
 
-   * **Atributes:** none
+   * **Arguments:** none
 
    * **Return:** none
 
@@ -658,7 +658,7 @@ Attribute name | Type | Description | Default value
  * `MusicOsu.from_folder` <a id="musicOsuFromFolder"></a>
    * **Description:** `Staticmethod` - Create and initialize a MusicOsu instance with a folder path of a folder song with beatmaps.
 
-   * **Atributes:**
+   * **Arguments:**
      * `folderpath`: *str* - The path of folder song with beatmaps.
      * `modes`: *list* - List of int wich represent beatmaps mode to load.
    * **Return:** *musicOsu.MusicOsu* - The MusicOsu instance loaded.
