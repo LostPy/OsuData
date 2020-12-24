@@ -3,7 +3,7 @@
 
 from setuptools import setup, find_packages
 
-import OsuData
+import osuData
 
 __doc__ = """A small framework to work or vizualise osu! beatmaps data.
 This framework use object-oriented programming (OOP) to easily manage beatmap data.
@@ -12,7 +12,7 @@ For more informations, read the README.md file."""
 
 
 setup(
-	name='OsuData',
+	name='osuData',
 	version='1.0',
 	author='LostPy',
 	description="A small framework to work with osu! data",
@@ -28,5 +28,6 @@ setup(
         "Programming Language :: Python :: 3.5+",
         "Topic :: osu!",
     ],
-    license='MIT'
+    license='MIT',
+    packages = find_packages()
     )
