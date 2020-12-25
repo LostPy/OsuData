@@ -192,6 +192,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
 
    * **Arguments:**
      * `folderpath`: *str* - path of osu! folder
+     * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
 
    * **Return:** *tuple(DataFrame, list)* - (dataframe, errors) with errors the list of beatmap path where a error was found.
 
