@@ -11,9 +11,9 @@ import plotly.graph_objects as go
 #from plotly.subplots import make_subplots
 
 try:
-	from ..osuDataClass import MusicOsu, Beatmap
+	from ..osuDataClass import BeatmapSet, Beatmap
 except ValueError:  # When script.py is the __main__
-	from osuDataClass import MusicOsu, Beatmap
+	from osuDataClass import BeatmapSet, Beatmap
 
 def global_info(dataframe: pd.DataFrame):
 	pass
@@ -45,19 +45,19 @@ def beatmap_error(dataframe: pd.DataFrame):
 	pass
 
 
-def play_music(folder_path: str = None, musicosu: MusicOsu = None):
-	if musicosu is not None:
-		if isinstance(musicosu, MusicOsu):
-			musicosu.play_music()
+def play_music(folder_path: str = None, beatmap_set: BeatmapSet = None):
+	if beatmap_set is not None:
+		if isinstance(beatmap_set, BeatmapSet):
+			beatmap_set.play_music()
 		else:
-			raise TypeError("'musicosu' must be an instance of 'MusicOsu'")
+			raise TypeError("'beatmap_set' must be an instance of 'BeatmapSet'")
 	elif folder_path is not None:
 		if isinstance(folder_path, str):
-			MusicOsu.from_folder(folder_path).play_music()
+			BeatmapSet.from_folder(folder_path).play_music()
 		else:
 			raise TypeError("folder_path must be a str")
 	else:
-		raise TypeError("Missing one argument: 'folder_path' or 'MusicOsu'.")
+		raise TypeError("Missing one argument: 'folder_path' or 'BeatmapSet'.")
 
 
 def beatmap_data(beatmap: Beatmap):

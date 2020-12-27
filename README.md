@@ -21,7 +21,7 @@ You can use `export` and `info` modules to work without object-oriented programm
  
     * [Advanced use](#advancedUse)
       * [Beatmap](#beatmap)
-      * [MusicOsu](#musicOsu)
+      * [BeatmapSet](#beatmapSet)
 
  4. [Table of functions](#tableFunctions)
     * [Functions](#tableFunctions1)
@@ -77,7 +77,7 @@ OsuData
 └─── osuDataClass
 |      __init__.py
 |      beatmap.py
-|      musicOsu.py
+|      beatmapSet.py
 |      beatmapError.py
 |
 └───__init__.py
@@ -282,11 +282,11 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
  * `info.osu_data` <a id="osuData"></a>
 
  * `info.play_music` <a id="playMusic"></a>
-   * **Description:** Play the music of a folder song or a [MusicOsu](#musicOsu) instance
+   * **Description:** Play the music of a folder song or a [BeatmapSet](#beatmapSet) instance
 
    * **Arguments:**
      * (`folder_path`): *str* - path of osu! folder song
-     * (`musicosu`): *MusicOsu* - A [MusicOsu](#musicOsu) instance
+     * (`beatmap_set`): *BeatmapSet* - A [BeatmapSet](#beatmapSet) instance
 
    * **Return:** none
 
@@ -298,15 +298,15 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
 
 ### Advanced use <a id="advancedUse"></a>
 Use the OOP to work with beatmap or music folder (group of beatmap with a music) like objects.  
-To easily create a Beatmap object or a MusicOsu object, use :
+To easily create a Beatmap object or a BeatmapSet object, use :
 ```py
-from OsuData.osuDataClass import Beatmap, MusicOsu
+from OsuData.osuDataClass import Beatmap, BeatmapSet
 
 # To create a Beatmap object
 beatmap = Beatmap.from_file('C:/osu!/Songs/folder_song/a_beatmap.osu')
 
-# To create a MusicOsu object
-musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
+# To create a BeatmapSet object
+beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
 ```
 #### Beatmap <a id="beatmap"></a>
 Class to represent a beatmap with this data.
@@ -411,10 +411,10 @@ Attribute name | Type | Description | Default value
  * `str(a)`: Return the str of [DataFrame][pdDf] representation of metadata.
 
 
-#### MusicOsu <a id="musicOsu"></a>
+#### BeatmapSet <a id="beatmapSet"></a>
 Class to represent a folder of beatmaps with a same song with this data.
-`class OsuData.osuDataClass.musicOsu.MusicOsu`  
-To import this class, you can use `from OsuData.osuDataClass import MusicOsu`.
+`class OsuData.osuDataClass.beatmapSet.BeatmapSet`  
+To import this class, you can use `from OsuData.osuDataClass import BeatmapSet`.
 
 ##### Attributes
 
@@ -430,7 +430,7 @@ Attribute name | Type | Description | Default value
 `date_add` | *datetime.Datetime* | The date of creation of the folder | None
 
 ##### Methods
- * `MusicOsu.append`  <a id="musicOsuAppend"></a>
+ * `BeatmapSet.append`  <a id="beatmapSetAppend"></a>
    * **Description:** Add a [beatmap][#beatmap] in the list of beatmaps.
 
    * **Arguments:**
@@ -439,14 +439,14 @@ Attribute name | Type | Description | Default value
    * **Return:** none
 
    ```py
-   from OsuData.osuDataClass import Beatmap, MusicOsu
+   from OsuData.osuDataClass import Beatmap, BeatmapSet
 
    beatmap = Beatmap.from_file('C:/osu!/Songs/folder_song/a_beatmap.osu')
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/other_folder_song/')
-   musicosu.append(beatmap)
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/other_folder_song/')
+   beatmap_set.append(beatmap)
    ```
 
- * `MusicOsu.pop`  <a id="musicOsuPop"></a>
+ * `BeatmapSet.pop`  <a id="beatmapSetPop"></a>
    * **Description:** Delete and return a [beatmap](#beatmap)
 
    * **Arguments:**
@@ -455,55 +455,55 @@ Attribute name | Type | Description | Default value
    * **Return:** `Beatmap` - The [beatmap](#beatmap) instance delete.
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   beatmap = musicosu.pop()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   beatmap = beatmap_set.pop()
    ```
 
- * `MusicOsu.metadata`  <a id="musicOsuMetadata"></a>
-   * **Description:** Return metadata of MusicOsu instance in a dictionary
+ * `BeatmapSet.metadata`  <a id="beatmapSetMetadata"></a>
+   * **Description:** Return metadata of BeatmapSet instance in a dictionary
 
    * **Arguments:** none
 
-   * **Return:** *dict* - A dictionary with metadata of MusicOsu instance.
+   * **Return:** *dict* - A dictionary with metadata of BeatmapSet instance.
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   metadata = musicosu.metadata()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   metadata = beatmap_set.metadata()
    ```
 
- * `MusicOsu.keys`  <a id="musicOsuKeys"></a>
-   * **Description:** Return Attributes name of MusicOsu object
+ * `BeatmapSet.keys`  <a id="beatmapSetKeys"></a>
+   * **Description:** Return Attributes name of BeatmapSet object
 
    * **Arguments:** none
 
    * **Return:** *list* - List of attributes names (*str*).
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   attributes = musicosu.keys()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   attributes = beatmap_set.keys()
    ```
 
- * `MusicOsu.values`  <a id="musicOsuValues"></a>
-   * **Description:** Return Attributes value of MusicOsu object
+ * `BeatmapSet.values`  <a id="beatmapSetValues"></a>
+   * **Description:** Return Attributes value of BeatmapSet object
 
    * **Arguments:** none
 
    * **Return:** *list* - List of attributes value.
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   values = musicosu.values()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   values = beatmap_set.values()
    ```
 
- * `MusicOsu.items`  <a id="musicOsuItems"></a>
+ * `BeatmapSet.items`  <a id="beatmapSetItems"></a>
    * **Description:** Return tuples with first index the key and the second index the value.
 
    * **Arguments:** none
@@ -511,14 +511,14 @@ Attribute name | Type | Description | Default value
    * **Return:** *list* - List of tuple with a couple `(key, value)`
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   items = musicosu.items()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   items = beatmap_set.items()
    ```
 
- * `MusicOsu.load`  <a id="musicOsuLoad"></a>
-   * **Description:** Initialize the MusicOsu instance by loading the [beatmaps](#beatmap) of the folder. 
+ * `BeatmapSet.load`  <a id="beatmapSetLoad"></a>
+   * **Description:** Initialize the BeatmapSet instance by loading the [beatmaps](#beatmap) of the folder. 
 
    * **Arguments:**
      * (`modes`): *list*, default `[0, 1, 2, 3]` - List of int wich represent [beatmap modes][metadata] to load
@@ -526,42 +526,42 @@ Attribute name | Type | Description | Default value
    * **Return:** none
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu('C:/osu!/Songs/folder_song/')
-   musicosu.load()
+   beatmap_set = BeatmapSet('C:/osu!/Songs/folder_song/')
+   beatmap_set.load()
    ```
 
- * `MusicOsu.to_dataframe`  <a id="musicOsuToDataframe"></a>
-   * **Description:** Export MusicOsu object in a `pandas.DataFrame`
+ * `BeatmapSet.to_dataframe`  <a id="beatmapSetToDataframe"></a>
+   * **Description:** Export BeatmapSet object in a `pandas.DataFrame`
 
    * **Arguments:** none
 
    * **Return:** *pandas.DataFrame* - The dataframe with all [beatmaps](#beatmap) [metadata][metadata].
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   df = musicosu.to_dataframe()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   df = beatmap_set.to_dataframe()
    ```
 
- * `MusicOsu.dataframe_hitobjects`  <a id="musicOsuDataFrameHitobjects"></a>
-   * **Description:** Export [hit-objects][hit-objects] data of all [beatmaps](#beatmap) of MusicOsu object in a `pandas.DataFrame`
+ * `BeatmapSet.dataframe_hitobjects`  <a id="beatmapSetDataFrameHitobjects"></a>
+   * **Description:** Export [hit-objects][hit-objects] data of all [beatmaps](#beatmap) of BeatmapSet object in a `pandas.DataFrame`
 
    * **Arguments:** none
 
    * **Return:** *pandas.DataFrame* - The dataframe of [hit-objects][hit-objects] data
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   df_hitobjects = musicosu.dataframe_hitobjects()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   df_hitobjects = beatmap_set.dataframe_hitobjects()
    ```
 
- * `MusicOsu.to_csv`  <a id="musicOsuToCsv"></a>
-   * **Description:** Export all [beatmaps](#beatmap) [metadata][metadata] of MusicOsu object in a csv file.
+ * `BeatmapSet.to_csv`  <a id="beatmapSetToCsv"></a>
+   * **Description:** Export all [beatmaps](#beatmap) [metadata][metadata] of BeatmapSet object in a csv file.
 
    * **Arguments:**
      * (`path`): *str*, default `None` - Path where the csv file is save, by default, it's in current path.
@@ -569,13 +569,13 @@ Attribute name | Type | Description | Default value
    * **Return:** *str* - the path where the file is save.
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   musicosu.to_csv()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   beatmap_set.to_csv()
    ```
 
- * `MusicOsu.to_excel`  <a id="musicOsuToExcel"></a>
+ * `BeatmapSet.to_excel`  <a id="beatmapSetToExcel"></a>
    * **Description:** Like `to_csv` method but export in a xlsx file.
 
    * **Arguments:**
@@ -586,42 +586,42 @@ Attribute name | Type | Description | Default value
    * **Return:** *str* - the path where the file is save.
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   musicosu.to_excel()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   beatmap_set.to_excel()
    ```
 
- * `MusicOsu.mp3_object`  <a id="musicOsuMp3Object"></a>
-   * **Description:** Load the mp3 file of MusicOsu instance in a `pydub.MP3` instance.
+ * `BeatmapSet.mp3_object`  <a id="beatmapSetMp3Object"></a>
+   * **Description:** Load the mp3 file of BeatmapSet instance in a `pydub.MP3` instance.
 
    * **Arguments:** none
 
-   * **Return:** *pydub.MP3* - The [mp3 instance][pydub] of the mp3 file of MusicOsu.
+   * **Return:** *pydub.MP3* - The [mp3 instance][pydub] of the mp3 file of BeatmapSet.
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   mp3 = musicosu.mp3_object()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   mp3 = beatmap_set.mp3_object()
    ```
 
- * `MusicOsu.to_wav`  <a id="musicOsuToWav"></a>
+ * `BeatmapSet.to_wav`  <a id="beatmapSetToWav"></a>
    * **Description:** Export the mp3 file in a wav file.
 
    * **Arguments:**
      * `name`: *str*, default `audio_wav` - The name of wav file.
 
-   * **Return:** *str* - The path where the wav file is save (The folder of MusicOsu instance).
+   * **Return:** *str* - The path where the wav file is save (The folder of BeatmapSet instance).
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   wav_path = musicosu.to_wav()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   wav_path = beatmap_set.to_wav()
    ```
 
- * `MusicOsu.data_music`  <a id="musicOsuDataMusic"></a>
+ * `BeatmapSet.data_music`  <a id="beatmapSetDataMusic"></a>
    * **Description:** Extract audio data of the mp3 file.
 
    * **Arguments:** none
@@ -629,60 +629,60 @@ Attribute name | Type | Description | Default value
    * **Return:** (*int*, *list*) - The [rate and AudioData][pydub] from mp3 file.
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   rate, audData = musicosu.data_music()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   rate, audData = beatmap_set.data_music()
    ```
 
- * `MusicOsu.music_to_dataframe`  <a id="musicOsuMusicToDataframe"></a>
-   * **Description:** Export mp3 file from MusicOsu instance in a [`pandas.DataFrame`][pdDf].
+ * `BeatmapSet.music_to_dataframe`  <a id="beatmapSetMusicToDataframe"></a>
+   * **Description:** Export mp3 file from BeatmapSet instance in a [`pandas.DataFrame`][pdDf].
 
    * **Arguments:** none
 
    * **Return:** *pandas.DataFrame* - The dataframe of mp3 file data, with 2 columns [L, R]
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   df_music = musicosu.music_to_dataframe()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   df_music = beatmap_set.music_to_dataframe()
    ```
 
- * `MusicOsu.play_music` <a id="musicOsuPlay"></a>
-   * **Description:** A method to play the music of MusicOsu instance.
+ * `BeatmapSet.play_music` <a id="beatmapSetPlay"></a>
+   * **Description:** A method to play the music of BeatmapSet instance.
 
    * **Arguments:** none
 
    * **Return:** none
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
-   musicosu.play_music()
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
+   beatmap_set.play_music()
    ```
 
- * `MusicOsu.from_folder` <a id="musicOsuFromFolder"></a>
-   * **Description:** `Staticmethod` - Create and initialize a MusicOsu instance with a folder path of a folder song with beatmaps.
+ * `BeatmapSet.from_folder` <a id="beatmapSetFromFolder"></a>
+   * **Description:** `Staticmethod` - Create and initialize a BeatmapSet instance with a folder path of a folder song with beatmaps.
 
    * **Arguments:**
      * `folderpath`: *str* - The path of folder song with beatmaps.
      * `modes`: *list* - List of int wich represent beatmaps mode to load.
-   * **Return:** *musicOsu.MusicOsu* - The MusicOsu instance loaded.
+   * **Return:** *beatmapSet.BeatmapSet* - The BeatmapSet instance loaded.
 
    ```py
-   from OsuData.osuDataClass import MusicOsu
+   from OsuData.osuDataClass import BeatmapSet
 
-   musicosu = MusicOsu.from_folder('C:/osu!/Songs/folder_song/')
+   beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    ```
 
 ##### Supported Operations
  * Comparison operators : Compare two beatmaps with the lenght of the attribute `beatmaps`
- * `beatmap in a`: Return True if `beatmap` instance is in MusicOsu `a`
+ * `beatmap in a`: Return True if `beatmap` instance is in BeatmapSet `a`
  * `len(a)`: Return the lenght of the attribute `beatmaps`
  * `str(a)`: Return the str of [DataFrame][pdDf] representation of all beatmaps metadata.
- * `del(a[index])`: Delete the beatmap at `index` (in `beatmaps` list) from MusicOsu instance `a`
+ * `del(a[index])`: Delete the beatmap at `index` (in `beatmaps` list) from BeatmapSet instance `a`
  * `a[index]`: Return the beatmap at `index`
  * `a[index] = beatmap`: insert `beatmap` at the index
 
@@ -692,7 +692,7 @@ Attribute name | Type | Description | Default value
    * [`to_csv`](#exportToCsv)
    * [`to_excel`](#exportToExcel)
    * [`mp3_to_wav`](#mp3ToWav)
-   * [`musicOsu_objects`](#musicOsuObjects)
+   * [`beatmapSet_objects`](#beatmapSetObjects)
    * [`from_beatmap`](#fromBeatmap)
    * [`from_folder`](#fromFolder)
    * [`from_osu`](#fromOsu)
@@ -718,24 +718,24 @@ Attribute name | Type | Description | Default value
    * [`to_dataframe`](#beatmapToDataframe)
    * [`from_file`](#beatmapFromFile)
 
- * [`class musicOsu.MusicOsu`](#musicOsu)
-   * [`append`](#musicOsuAppend)
-   * [`pop`](#musicOsuPop)
-   * [`metadata`](#musicOsuMetadata)
-   * [`keys`](#musicOsuKeys)
-   * [`values`](#musicOsuValues)
-   * [`items`](#musicOsuItems)
-   * [`load`](#musicOsuLoad)
-   * [`to_dataframe`](#musicOsuToDataframe)
-   * [`dataframe_hitobjects`](#musicOsuDataFrameHitobjects)
-   * [`to_csv`](#musicOsuToCsv)
-   * [`to_excel`](#musicOsuToExcel)
-   * [`mp3_object`](#musicOsuMp3Object)
-   * [`to_wav`](#musicOsuToWav)
-   * [`data_music`](#musicOsuDataMusic)
-   * [`music_to_dataframe`](#musicOsuMusicToDataframe)
-   * [`play_music`](#musicOsuPlay)
-   * [`from_folder`](#musicOsuFromFolder)
+ * [`class beatmapSet.BeatmapSet`](#beatmapSet)
+   * [`append`](#beatmapSetAppend)
+   * [`pop`](#beatmapSetPop)
+   * [`metadata`](#beatmapSetMetadata)
+   * [`keys`](#beatmapSetKeys)
+   * [`values`](#beatmapSetValues)
+   * [`items`](#beatmapSetItems)
+   * [`load`](#beatmapSetLoad)
+   * [`to_dataframe`](#beatmapSetToDataframe)
+   * [`dataframe_hitobjects`](#beatmapSetDataFrameHitobjects)
+   * [`to_csv`](#beatmapSetToCsv)
+   * [`to_excel`](#beatmapSetToExcel)
+   * [`mp3_object`](#beatmapSetMp3Object)
+   * [`to_wav`](#beatmapSetToWav)
+   * [`data_music`](#beatmapSetDataMusic)
+   * [`music_to_dataframe`](#beatmapSetMusicToDataframe)
+   * [`play_music`](#beatmapSetPlay)
+   * [`from_folder`](#beatmapSetFromFolder)
 
 
 ## Index
@@ -753,7 +753,7 @@ Attribute name | Type | Description | Default value
  
    * [Advanced use](#advancedUse)
      * [Beatmap](#beatmap)
-     * [MusicOsu](#musicOsu)
+     * [BeatmapSet](#beatmapSet)
 
  4. [Table of functions](#tableFunctions)
    * [Functions](#tableFunctions1)
