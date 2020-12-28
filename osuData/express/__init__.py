@@ -9,7 +9,7 @@ from .export import (
 	osu_to_csv,
 	osu_to_excel,
 	mp3_to_wav,
-	musicOsu_objects,
+	beatmapSet_objects,
 	from_beatmap,
 	from_folder,
 	from_osu

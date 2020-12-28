@@ -5,4 +5,4 @@ Author: LostPy
 """
 
 from .beatmap import Beatmap, load_beatmap
-from .musicOsu import MusicOsu
+from .beatmapSet import BeatmapSet
