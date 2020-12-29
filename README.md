@@ -35,7 +35,7 @@ You can use `export` and `info` modules to work without object-oriented programm
  
  * License: [MIT License][license]
 
- * requirements: <a id="requirements"></a>
+ * Requirements: <a id="requirements"></a>
    * **Mandatory**
      * [Python 3.x][py]
      * [pydub][pydub] (To manipulate mp3 file and play music)
@@ -47,6 +47,10 @@ You can use `export` and `info` modules to work without object-oriented programm
      * [colorama][color] (For coulour logs)
      * [plotly][plotly] or [seaborn][seaborn] (To visualize data)
      * [sklearn][sklearn] (To initialize `stars` number with an estimate)
+
+ * Supported osu! file
+ This package can read the `.osu` file (beatmap) with a version format of 5 or higher.
+ To check the osu file version, you can read the first line of a `.osu` file.
 
  * Utility link:
    * [osu! .osu file format][osu_format]
