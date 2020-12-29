@@ -13,6 +13,10 @@ import pydub
 from pydub.playback import play
 
 from .beatmap import Beatmap, load_beatmap
+try:
+	from ..bin import save_model_path
+except ValueError:  # when the __main__ is script.py
+	from bin import save_model_path
 
 
 class BeatmapSet:
@@ -135,7 +139,7 @@ class BeatmapSet:
 		
 		file_model_isNone = file_model is None
 		if file_model_isNone:
-			file_model = open('../bin/save_model.bin', 'rb')
+			file_model = open(save_model_path, 'rb')
 
 		first = True
 		for name in os.listdir(self.folderpath):

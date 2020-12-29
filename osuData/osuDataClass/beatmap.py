@@ -103,8 +103,8 @@ class Beatmap:
 		"""Load all data of beatmap and initialize the object."""
 
 		with open(self.path, 'r', encoding='utf8') as beatmap:
-				lines = beatmap.read().split('\n')
-				lines = [l for l in lines if l != '']
+			lines = beatmap.read().split('\n')
+			lines = [l for l in lines if l != '']
 			valid, data = load_beatmap(self.path, lines=lines, file_model=file_model)
 
 		if valid:
@@ -165,7 +165,7 @@ class Beatmap:
 		'title': self.name,
 		'Creator': self.creator,
 		'DifficultyName': self.diffname,
-		'Stars': self.stars
+		'Stars': self.stars,
 		'HP': self.difficulties['HP'],
 		'CS': self.difficulties['CS'],
 		'OD': self.difficulties['OD'],

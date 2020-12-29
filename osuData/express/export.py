@@ -14,10 +14,13 @@ try:
 	from ..utility import Logs, progress_bar
 	from ..osuDataClass import Beatmap, BeatmapSet
 	from ..osuDataClass.beatmapError import BeatmapError
+	from ..bin import save_model_path
 except ValueError:  # When script.py is the __main__
 	from utility import Logs, progress_bar
 	from osuDataClass import Beatmap, BeatmapSet
 	from osuDataClass.beatmapError import BeatmapError
+	from bin import save_model_path
+
 
 def to_csv(folderpath: str, csv_path: str = ''):
 	beatmap_set = BeatmapSet.from_folder(folderpath)
@@ -57,7 +60,7 @@ def beatmapSet_objects(osu_path: str, n: int = None, display_progress: bool = Tr
 	A function to extract osu! beatmaps data and return the list of BeatmapSet object
 	and the list path of beatmaps where there is a error.
 	"""
-	file_model = open('../bin/save_model.bin', 'rb')
+	file_model = open(save_model_path, 'rb')
 
 	beatmap_set_objects = []
 	errors = []

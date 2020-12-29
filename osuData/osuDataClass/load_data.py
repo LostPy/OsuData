@@ -12,13 +12,17 @@ try:
 	sklearn_imported = True
 except ImportError:
 	sklearn_imported = False
+try:
+	from ..bin import save_model_path
+except ValueError:  # when the __main__ is script.py
+	from bin import save_model_path
 
 
 def stars_diff(hp: float, cs: float, od: float, ar: float, slider_multiplier: float, save=None):
 	if sklearn_imported:
 		save_isNone = save is None
 		if save_isNone:
-			save = open('../bin/save_model.bin', 'rb')
+			save = open(save_model_path, 'rb')
 		model = pickle.load(save)
 
 		if save_isNone:
