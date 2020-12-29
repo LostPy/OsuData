@@ -168,7 +168,8 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Arguments:**
      * `osu_path`: *str* - path of osu! folder
      * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
-     * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
+     * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
+     * (`display_progress`): *bool*, default: `True` - if True, the progress is display in console with a progress bar and path of folders.
 
    * **Return:** *list* -  list of [BeatmapSet](#beatmapSet).
 
@@ -214,6 +215,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Arguments:**
      * `osu_path`: *str* - path of osu! folder
      * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
+     * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
      * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
 
    * **Return:** *tuple(DataFrame, list)* - (dataframe, errors) with errors the list of beatmap path where a error was found.
@@ -231,6 +233,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      * `osu_path`: *str* - The osu folder path.
      * (`csv_path`): *str*, default: current path - path where the csv file is save.
      * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
+     * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
      * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
 
    * **Return:** *str* - path of csv file.
@@ -248,6 +251,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      * `osu_path`: *str* - The osu folder path.
      * (`excel_path`): *str*, default: current path - path where the excel file is save.
      * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
+     * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
      * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
      * (Other arguments): You can use keywords arguments to pass at `to_excel` function of [pandas][pdToExcel].
 

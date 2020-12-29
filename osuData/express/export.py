@@ -55,7 +55,7 @@ def mp3_to_wav(mp3_path: str, wav_path: str = ''):
 	return wav_path
 
 
-def beatmapSet_objects(osu_path: str, n: int = None, display_progress: bool = True):
+def beatmapSet_objects(osu_path: str, n: int = None, compact_log: bool = False, display_progress: bool = True):
 	"""
 	A function to extract osu! beatmaps data and return the list of BeatmapSet object
 	and the list path of beatmaps where there is a error.
@@ -78,7 +78,7 @@ def beatmapSet_objects(osu_path: str, n: int = None, display_progress: bool = Tr
 		if os.path.isdir(os.path.join(songspath, name)):
 			start = time.time()
 			if display_progress:
-				progress_bar(i, n, info=os.path.join(songspath, name), length=60, suffix=f'Directories - ({current_speed} dir/s - mean: {speed} dir/s)')
+				progress_bar(i, n, info=os.path.join(songspath, name), length=60, suffix=f'Directories - ({current_speed} dir/s - mean: {speed} dir/s)', compact=compact_log)
 			beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), file_model=file_model)
 			beatmap_set_objects.append(beatmap_set)
 			errors += beatmap_set.errors
@@ -112,9 +112,9 @@ def from_folder(folderpath: str):
 	return metadata, hitobjects_data, beatmap_set.errors
 
 
-def from_osu(osu_path: str, n: int = None, display_progress: bool = True):
+def from_osu(osu_path: str, n: int = None, compact_log: bool = False, display_progress: bool = True):
 	"""A function to extract beatmaps data from osu folder and return two dataframe and a list of path where there is a error."""
-	beatmap_set_objects, errors = beatmapSet_objects(osu_path, n=n, display_progress=display_progress)
+	beatmap_set_objects, errors = beatmapSet_objects(osu_path, n=n, compact_log=compact_log, display_progress=display_progress)
 	Logs.info("Merge all data...")
 	metadata = pd.concat([beatmap_set.to_dataframe() for beatmap_set in beatmap_set_objects], axis=0).reset_index(drop=True)
 	if display_progress and len(errors) > 0:
@@ -123,9 +123,9 @@ def from_osu(osu_path: str, n: int = None, display_progress: bool = True):
 	return metadata, errors
 
 
-def osu_to_csv(osu_path: str, csv_path:str = '', n: int = None, display_progress=True):
+def osu_to_csv(osu_path: str, csv_path:str = '', n: int = None, compact_log: bool = False, display_progress=True):
 	"""Export metadata or hitobjects in a csv file."""
-	metadata, errors = from_osu(osu_path, n=n, display_progress=display_progress)
+	metadata, errors = from_osu(osu_path, n=n, compact_log=compact_log, display_progress=display_progress)
 	Logs.info("the csv file is being created...")
 	csv_path = './osu_data.csv' if csv_path == '' else csv_path
 	metadata.to_csv(csv_path, sep='$', index=False)
@@ -138,9 +138,9 @@ def osu_to_csv(osu_path: str, csv_path:str = '', n: int = None, display_progress
 	return csv_path
 
 
-def osu_to_excel(osu_path: str, excel_path: str = '', n: int = None, display_progress=True, **kwargs):
+def osu_to_excel(osu_path: str, excel_path: str = '', n: int = None, compact_log: bool = False, display_progress=True, **kwargs):
 	"""Export metadata and hitobjects in a xlsx file."""
-	metadata, errors = from_osu(osu_path, n=n, display_progress=display_progress)
+	metadata, errors = from_osu(osu_path, n=n, compact_log=compact_log, display_progress=display_progress)
 	mode = 'w' if excel_path.strip() == '' else 'a'
 	excel_path = './osu_data.xlsx' if excel_path == '' else excel_path
 	with pd.ExcelWriter(excel_path, mode=mode) as writer:
