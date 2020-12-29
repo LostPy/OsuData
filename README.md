@@ -36,13 +36,17 @@ You can use `export` and `info` modules to work without object-oriented programm
  * License: [MIT License][license]
 
  * requirements: <a id="requirements"></a>
-   * [Python 3.x][py]
-   * [colorama][color] (for logs, you can replace logs by print)
-   * [pydub][pydub]
-   * [numpy][np]
-   * [scipy][scipy]
-   * [pandas][pd]
-   * [plotly][plotly]
+   * **Mandatory**
+     * [Python 3.x][py]
+     * [pydub][pydub] (To manipulate mp3 file and play music)
+     * [numpy][np] (Basis for data manipulation)
+     * [scipy][scipy] (To extract music data)
+     * [pandas][pd] (Basis for data manipulation)
+
+   * **Optionnal**
+     * [colorama][color] (For coulour logs)
+     * [plotly][plotly] or [seaborn][seaborn] (To visualize data)
+     * [sklearn][sklearn] (To initialize `stars` number with an estimate)
 
  * Utility link:
    * [osu! .osu file format][osu_format]
@@ -794,6 +798,8 @@ Attribute name | Type | Description | Default value
 [pdDf]: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
 [pdToExcel]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_excel.html
 [plotly]: https://plotly.com/
+[seaborn]: https://seaborn.pydata.org/
+[sklearn]: https://sklearn.org/
 [osu_format]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29
 [structure]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29#structure
 [general]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29#general
