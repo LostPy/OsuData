@@ -162,7 +162,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    wav_path = express.mp3_to_wav('C:/osu!/Songs/a_folder_path/audio.mp3')
    ```
 
- * `export.beatmapSet_objects`
+ * `export.beatmapSet_objects` <a id="beatmapSetObjects"></a>
    * **Description:** Export beatmaps set data from osu! folder in a list of [BeatmapSet object](#beatmapSet).
 
    * **Arguments:**
