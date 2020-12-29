@@ -19,7 +19,7 @@ except ImportError:
 		plotly_imported = False
 		sns.set_style(style='darkgrid')
 	except ImportError:
-		raise ImportError("plotly module and seaborn module not found. Please, install plotly OR seaborn")
+		raise ImportError("plotly module and seaborn module not found. Please, install plotly or seaborn")
 
 try:
 	from ..osuDataClass import BeatmapSet, Beatmap
@@ -57,7 +57,7 @@ def date_add(dataframe: pd.DataFrame):
 		fig = px.histogram(dataframe, x=dataframe.index, color="mode", hover_data=dataframe.columns)
 		plot(fig)
 	else:
-		plt.hist(x=dataframe.index, color=dataframe['mode'])
+		sns.histplot(data=dataframe, x=dataframe.index, hue="mode")
 		plt.legend()
 		plt.show()
 
