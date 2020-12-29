@@ -80,7 +80,3 @@ def load_beatmap(filepath: str, lines: list = None, file_model=None) -> dict:
 		return True, data
 	except IndexError:
 		return False, [filepath]
-
-
-if __name__ == '__main__':
-	print(load_beatmap('/media/lost/Data-Windows-Jeux/osu!/Songs/3631 Elfen Lied - Lilium/Elfen Lied - Lilium (Saturos-fangirl) [Easy].osu')[1])
