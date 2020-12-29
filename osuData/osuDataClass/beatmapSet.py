@@ -126,12 +126,16 @@ class BeatmapSet:
 		"""Similar to the items method of dict objects but with all attributes of BeatmapSet."""
 		return [(key, value) for key, value in self.__dict__.items()]
 
-	def load(self, modes=[0, 1, 2, 3]):
+	def load(self, modes=[0, 1, 2, 3], file_model=None):
 		"""
 		Initialize BeatmapSet object.
 		Use `modes` argument if you want get specifics modes.
 		"""
 		self.date_add = datetime.fromtimestamp(os.path.getctime(self.folderpath)).strftime('%Y-%m-%d %H:%M:%S')
+		
+		file_model_isNone = file_model is None
+		if file_model_isNone:
+			file_model = open('../bin/save_model.bin', 'rb')
 
 		first = True
 		for name in os.listdir(self.folderpath):
@@ -142,7 +146,7 @@ class BeatmapSet:
 						lines = f.read().split('\n')
 						while '' in lines:
 							lines.remove('')
-					valid, data = load_beatmap(path, lines)
+					valid, data = load_beatmap(path, lines, from_http, file_model)
 					if valid:
 						self.music_path = lines[2][lines[2].find(" ")+1:]
 						self.title = data['title']
@@ -165,7 +169,7 @@ class BeatmapSet:
 			df['Artist'] = self.artist
 			df['date_add'] = self.date_add
 		else:
-			df = pd.DataFrame(columns=['version_fmt', 'countdown', 'mode', 'title', 'Creator', 'DifficultyName', 'HP', 'CS', 'OD', 'AR', 'SliderMultiplier', 'SliderTickRate', 'time', 'date_add'])
+			df = pd.DataFrame(columns=['version_fmt', 'countdown', 'mode', 'title', 'Creator', 'DifficultyName', 'Stars', 'HP', 'CS', 'OD', 'AR', 'SliderMultiplier', 'SliderTickRate', 'time', 'date_add'])
 		return df
 
 	def dataframe_hitobjects(self):
@@ -211,12 +215,12 @@ class BeatmapSet:
 		play(self.mp3_object())
 
 	@staticmethod
-	def from_folder(folderpath: str, modes=[0, 1, 2, 3]):
+	def from_folder(folderpath: str, modes=[0, 1, 2, 3], file_model=None):
 		"""
 		Return a BeatmapSet instance with all data find in folderpath.
 		Use `modes` argument if you want get specifics modes.
 		"""
 		music_osu = BeatmapSet(folderpath)
-		music_osu.load(modes)
+		music_osu.load(modes, file_model=file_model)
 		return music_osu
 

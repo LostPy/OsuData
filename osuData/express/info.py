@@ -5,15 +5,27 @@ Author: LostPy
 """
 
 import pandas as pd
-from plotly.offline import plot
-import plotly.express as px
-import plotly.graph_objects as go
-#from plotly.subplots import make_subplots
+
+try:
+	from plotly.offline import plot
+	import plotly.express as px
+	import plotly.graph_objects as go
+	#from plotly.subplots import make_subplots
+	plotly_imported = True
+except ImportError:
+	try:
+		from matplotlib import pyplot as plt
+		import seaborn as sns
+		plotly_imported = False
+		sns.set_style(style='darkgrid')
+	except ImportError:
+		raise ImportError("plotly module and seaborn module not found. Please, install plotly OR seaborn")
 
 try:
 	from ..osuDataClass import BeatmapSet, Beatmap
 except ValueError:  # When script.py is the __main__
 	from osuDataClass import BeatmapSet, Beatmap
+
 
 def global_info(dataframe: pd.DataFrame):
 	pass
@@ -30,15 +42,24 @@ def time(dataframe: pd.DataFrame):
 def version_fmt(dataframe: pd.DataFrame):
 	df_version = dataframe.groupby('version_fmt').count()
 	df_version.sort_index(inplace=True)
-	fig = go.Figure(go.Pie(labels=df_version.index, values=df_version['title']))
-	fig.update_traces(hoverinfo='label+percent+value', textinfo='percent+value')
-	plot(fig)
-
+	if plotly_imported:
+		fig = go.Figure(go.Pie(labels=df_version.index, values=df_version['title']))
+		fig.update_traces(hoverinfo='label+percent+value', textinfo='percent+value')
+		plot(fig)
+	else:
+		plt.pie(df_version['title'], labels=df_version.index)
+		plt.legend()
+		plt.show()
 
 
 def date_add(dataframe: pd.DataFrame):
-	fig = px.histogram(dataframe, x=dataframe.index, color="mode", hover_data=dataframe.columns)
-	plot(fig)
+	if plotly_imported:
+		fig = px.histogram(dataframe, x=dataframe.index, color="mode", hover_data=dataframe.columns)
+		plot(fig)
+	else:
+		plt.hist(x=dataframe.index, color=dataframe['mode'])
+		plt.legend()
+		plt.show()
 
 
 def beatmap_error(dataframe: pd.DataFrame):

@@ -69,12 +69,28 @@ if __name__ == "__main__":
 
 	mode, path = menu_mode()
 	if mode == 1:
-		csv_path = osu_to_csv(path)
-		Logs.info(f"csv file save in {os.path.abspath(csv_path)}")
+		try:
+			number = input("Number of beatmap set to export (a integer), if you want export all beatmap set, pass this question: ")
+			if number != "":
+				number = int(number)
+			else:
+				number = None
+			csv_path = osu_to_csv(path, n=number)
+			Logs.info(f"csv file save in {os.path.abspath(csv_path)}")
+		except ValueError:
+			Logs.error(f"The value is not valid, please, the number must be a integer.")
 
 	elif mode == 2:
-		excel_path = osu_to_excel(path)
-		Logs.info(f"Excel file save in {os.path.abspath(excel_path)}")
+		try:
+			number = input("Number of beatmap set to export (a integer), if you want export all beatmap set, pass this question: ")
+			if number != "":
+				number = int(number)
+			else:
+				number = None
+			excel_path = osu_to_excel(path, n=number)
+			Logs.info(f"Excel file save in {os.path.abspath(excel_path)}")
+		except ValueError:
+			Logs.error(f"The value is not valid, please, the number must be a integer.")
 
 	elif mode == 3:
 		metadata, hitobjects, errors = from_folder(path)

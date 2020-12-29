@@ -5,7 +5,11 @@ Author: LostPy
 """
 
 from datetime import datetime
-from colorama import Fore, init
+try:
+	from colorama import Fore, init
+	colorama_imported = True
+except ImportError:
+	colorama_imported = False
 
 
 def datetime_log() -> str:
@@ -14,35 +18,51 @@ def datetime_log() -> str:
 
 
 class Logs:
-	init()  # init colorama for Window
-	color_debug = Fore.CYAN
-	color_info = Fore.WHITE
-	color_warning = Fore.YELLOW
-	color_error = Fore.RED
-	color_success = Fore.GREEN
+	if colorama_imported:
+		init()  # init colorama for Window
+		color_debug = Fore.CYAN
+		color_info = Fore.WHITE
+		color_warning = Fore.YELLOW
+		color_error = Fore.RED
+		color_success = Fore.GREEN
 
 	@staticmethod
 	def info(msg: str):
 		msg_log = f"[{datetime_log()}][INFO] {msg}"
-		print(Logs.color_info + msg_log + Fore.RESET)
+		if colorama_imported:
+			print(Logs.color_info + msg_log + Fore.RESET)
+		else:
+			print(msg_log)
 
 	@staticmethod
 	def debug(msg: str):
 		msg_log = f"[{datetime_log()}][DEBUG] {msg}"
-		print(Logs.color_debug + msg_log + Fore.RESET)
+		if colorama_imported:
+			print(Logs.color_debug + msg_log + Fore.RESET)
+		else:
+			print(msg_log)
 
 	@staticmethod
 	def error(msg: str):
 		msg_log = f"[{datetime_log()}][ERROR] {msg}"
-		print(Logs.color_error + msg_log + Fore.RESET)
+		if colorama_imported:
+			print(Logs.color_error + msg_log + Fore.RESET)
+		else:
+			print(msg_log)
 
 	@staticmethod
 	def warning(msg: str):
 		msg_log = f"[{datetime_log()}][WARNING] {msg}"
-		print(Logs.color_warning + msg_log + Fore.RESET)
+		if colorama_imported:
+			print(Logs.color_warning + msg_log + Fore.RESET)
+		else:
+			print(msg_log)
 
 	@staticmethod
 	def success(msg: str):
 		msg_log = f"[{datetime_log()}][SUCCESS] {msg}"
-		print(Logs.color_success + msg_log + Fore.RESET)
+		if colorama_imported:
+			print(Logs.color_success + msg_log + Fore.RESET)
+		else:
+			print(msg_log)
 

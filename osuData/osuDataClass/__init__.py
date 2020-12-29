@@ -4,5 +4,6 @@ Project: OsuData
 Author: LostPy
 """
 
-from .beatmap import Beatmap, load_beatmap
+from .load_data import load_beatmap
+from .beatmap import Beatmap
 from .beatmapSet import BeatmapSet

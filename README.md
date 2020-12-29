@@ -79,6 +79,7 @@ OsuData
 |      beatmap.py
 |      beatmapSet.py
 |      beatmapError.py
+|      load_data.py
 |
 └───__init__.py
 └─── script.py
@@ -157,6 +158,22 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    wav_path = express.mp3_to_wav('C:/osu!/Songs/a_folder_path/audio.mp3')
    ```
 
+ * `export.beatmapSet_objects`
+   * **Description:** Export beatmaps set data from osu! folder in a list of [BeatmapSet object](#beatmapSet).
+
+   * **Arguments:**
+     * `osu_path`: *str* - path of osu! folder
+     * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
+     * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
+
+   * **Return:** *list* -  list of [BeatmapSet](#beatmapSet).
+
+   ```py
+   from OsuData import express
+
+   list_set = express.beatmapSet_objects('C:/osu!/')
+   ```
+
  * `export.from_beatmap` <a id="fromBeatmap"></a>
    * **Description:** Export [beatmap data][metadata] in [DataFrame][pdDf] (one line).
 
@@ -188,10 +205,11 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    ```
 
  * `export.from_osu` <a id="fromOsu"></a>
-   * **Description:** Export all beatmaps data from osu! folder in [DataFrame][pdDf].
+   * **Description:** Export beatmaps set data from osu! folder in [DataFrame][pdDf].
 
    * **Arguments:**
-     * `folderpath`: *str* - path of osu! folder
+     * `osu_path`: *str* - path of osu! folder
+     * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
      * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
 
    * **Return:** *tuple(DataFrame, list)* - (dataframe, errors) with errors the list of beatmap path where a error was found.
@@ -208,6 +226,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Arguments:**
      * `osu_path`: *str* - The osu folder path.
      * (`csv_path`): *str*, default: current path - path where the csv file is save.
+     * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
      * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
 
    * **Return:** *str* - path of csv file.
@@ -224,6 +243,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Arguments:**
      * `osu_path`: *str* - The osu folder path.
      * (`excel_path`): *str*, default: current path - path where the excel file is save.
+     * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
      * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
      * (Other arguments): You can use keywords arguments to pass at `to_excel` function of [pandas][pdToExcel].
 
@@ -253,7 +273,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      express.version_fmt(df)
    ```
    A distribution example for version_format
-   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/example/example-version_fmt.png)
+   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/im/example-version_fmt.png)
 
  * `info.difficulties` <a id="Difficulties"></a>
 
@@ -273,7 +293,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      df, errors = express.from_osu('C:/osu!/')
      express.date_add(df)
    ```
-   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/example/example-date_add.png)
+   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/im/example-date_add.png)
 
  * `info.beatmap_data` <a id="beatmapData"></a>
 
@@ -765,7 +785,7 @@ Attribute name | Type | Description | Default value
 [pydub]: https://github.com/jiaaro/pydub
 [np]: https://numpy.org/
 [scipy]: https://www.scipy.org/docs.html
-[pd]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_excel.html?highlight=to_excel#pandas.DataFrame.to_excel
+[pd]: https://pandas.pydata.org/
 [pdDf]: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
 [pdToExcel]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_excel.html
 [plotly]: https://plotly.com/
