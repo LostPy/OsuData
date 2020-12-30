@@ -52,7 +52,7 @@ You can use `export` and `info` modules to work without object-oriented programm
  This package can read the `.osu` file (beatmap) with a version format of 5 or higher.
  To check the osu file version, you can read the first line of a `.osu` file.
 
-   **Note:** The stars number of a beatmap is estimate with sklearn if sklearn is installed and if the beatmap file give the 'AR' stats (version of beatmap format > 5)
+   **Note:** The stars number of a beatmap is estimate with sklearn if sklearn is installed and if the beatmap file give the 'AR' stats (version of beatmap format > 7)
 
  * Utility link:
    * [osu! .osu file format][osu_format]
