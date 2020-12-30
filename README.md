@@ -48,7 +48,7 @@ You can use `export` and `info` modules to work without object-oriented programm
      * [plotly][plotly] or [seaborn][seaborn] (To visualize data)
      * [sklearn][sklearn] (To initialize `stars` number with an estimate)
 
- * Supported osu! file 
+ * Supported osu! file  
  This package can read the `.osu` file (beatmap) with a version format of 5 or higher.
  To check the osu file version, you can read the first line of a `.osu` file.
 
