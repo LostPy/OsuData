@@ -52,6 +52,8 @@ You can use `export` and `info` modules to work without object-oriented programm
  This package can read the `.osu` file (beatmap) with a version format of 5 or higher.
  To check the osu file version, you can read the first line of a `.osu` file.
 
+ **Note:** The stars number of a beatmap is estimate with sklearn if sklearn is installed and is the beatmap file give the 'AR' stats (version of beatmap format > 5)
+
  * Utility link:
    * [osu! .osu file format][osu_format]
    * [osu! .db file format][osu_db_format]
@@ -384,7 +386,7 @@ Attribute name | Type | Description | Default value
    * **Arguments:**
      * (`lines`): *list*, default: None - List of line (*str*) of beatmap file whithout `\n` char.
      * (`hitobjects`): *bool*, default: True - if `True` initalize also `hitobjects_data` attribute.
-     * (`file_model`): *_io.TextIoWrapper*, default: None - The binary file object of the model `sklearn.svm.SVR` to estimate the stars value of beatmaps. By default, the file `osuData/bin/save_model.bin` is used.
+     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
 
    * **Return:** none
 
@@ -429,7 +431,7 @@ Attribute name | Type | Description | Default value
 
    * **Arguments:**
      * `filepath`: *str* - The path of beatmap file.
-     * (`file_model`): *_io.TextIoWrapper*, default: None - The binary file object of the model `sklearn.svm.SVR` to estimate the stars value of beatmaps. By default, the file `osuData/bin/save_model.bin` is used.
+     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
    
    * **Return:**: *Beatmap* - A beatmap already initialize.
 
@@ -556,7 +558,7 @@ Attribute name | Type | Description | Default value
 
    * **Arguments:**
      * (`modes`): *list*, default `[0, 1, 2, 3]` - List of int wich represent [beatmap modes][metadata] to load
-     * (`file_model`): *_io.TextIoWrapper*, default: None - The binary file object of the model `sklearn.svm.SVR` to estimate the stars value of beatmaps. By default, the file `osuData/bin/save_model.bin` is used.
+     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
 
    * **Return:** none
 
@@ -704,7 +706,7 @@ Attribute name | Type | Description | Default value
    * **Arguments:**
      * `folderpath`: *str* - The path of folder song with beatmaps.
      * (`modes`): *list*, default: `[0, 1, 2, 3]` - List of int wich represent beatmaps mode to load.
-     * (`file_model`): *_io.TextIoWrapper*, default: None - The binary file object of the model `sklearn.svm.SVR` to estimate the stars value of beatmaps. By default, the file `osuData/bin/save_model.bin` is used.
+     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
 
    * **Return:** *beatmapSet.BeatmapSet* - The BeatmapSet instance loaded.
 

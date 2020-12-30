@@ -6,9 +6,15 @@ Author: LostPy
 
 import os
 import time
+import pickle
 
 import pandas as pd
 import pydub
+try:
+	from sklearn import svm
+	sklearn_imported = True
+except ImportError:
+	sklearn_imported = False
 
 try:
 	from ..utility import Logs, progress_bar
@@ -60,7 +66,11 @@ def beatmapSet_objects(osu_path: str, n: int = None, compact_log: bool = False, 
 	A function to extract osu! beatmaps data and return the list of BeatmapSet object
 	and the list path of beatmaps where there is a error.
 	"""
-	file_model = open(save_model_path, 'rb')
+	if sklearn_imported:
+		with open(save_model_path, 'rb') as save:
+			model = pickle.load(save)
+	else:
+		model = None
 
 	beatmap_set_objects = []
 	errors = []
@@ -79,7 +89,7 @@ def beatmapSet_objects(osu_path: str, n: int = None, compact_log: bool = False, 
 			start = time.time()
 			if display_progress:
 				progress_bar(i, n, info=os.path.join(songspath, name), length=60, suffix=f'Directories - ({current_speed} dir/s - mean: {speed} dir/s)', compact=compact_log)
-			beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), file_model=file_model)
+			beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), model=model)
 			beatmap_set_objects.append(beatmap_set)
 			errors += beatmap_set.errors
 			end = time.time()
@@ -91,7 +101,6 @@ def beatmapSet_objects(osu_path: str, n: int = None, compact_log: bool = False, 
 				n += 1
 			if i == (n - 1):
 				break
-	file_model.close()
 	return beatmap_set_objects, errors
 
 

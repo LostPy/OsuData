@@ -99,13 +99,12 @@ class Beatmap:
 		"""Return a list of tuple (name_attribute, value_attribute) of Beatmap object."""
 		return self.__dict__.items()
 
-	def load(self, lines: list = None, hitobjects=True, file_model=None):
+	def load(self, lines: list = None, hitobjects=True, model=None):
 		"""Load all data of beatmap and initialize the object."""
 
 		with open(self.path, 'r', encoding='utf8') as beatmap:
-			lines = beatmap.read().split('\n')
-			lines = [l for l in lines if l != '']
-			valid, data = load_beatmap(self.path, lines=lines, file_model=file_model)
+			lines = [l for l in beatmap.read().split('\n') if l != '']
+		valid, data = load_beatmap(self.path, lines=lines, model=model)
 
 		if valid:
 			self.name = data['title']
@@ -165,7 +164,7 @@ class Beatmap:
 		'title': self.name,
 		'Creator': self.creator,
 		'DifficultyName': self.diffname,
-		'Stars': self.stars,
+		'Stars': self.stars if self.stars > 0 else '',
 		'HP': self.difficulties['HP'],
 		'CS': self.difficulties['CS'],
 		'OD': self.difficulties['OD'],
@@ -176,9 +175,9 @@ class Beatmap:
 		return pd.DataFrame(data=data, index=range(1), columns=data.keys())
 
 	@staticmethod
-	def from_file(filepath: str, file_model=None):
+	def from_file(filepath: str, model=None):
 		"""Return a Beatmap instance with all data find in filepath."""
 		beatmap = Beatmap(filepath)
-		beatmap.load(file_model=file_model)
+		beatmap.load(model=model)
 		return beatmap
 

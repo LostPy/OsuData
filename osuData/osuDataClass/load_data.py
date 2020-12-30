@@ -4,7 +4,6 @@ Project: OsuData
 Author: LostPy
 """
 
-import requests
 import pickle
 
 try:
@@ -18,24 +17,19 @@ except ValueError:  # when the __main__ is script.py
 	from bin import save_model_path
 
 
-def stars_diff(hp: float, cs: float, od: float, ar: float, slider_multiplier: float, save=None):
-	if sklearn_imported:
-		save_isNone = save is None
-		if save_isNone:
-			save = open(save_model_path, 'rb')
-		model = pickle.load(save)
-
-		if save_isNone:
-			save.close()
-
-		stars = model.predict([[hp, cs, od, ar, slider_multiplier]])[0]
+def stars_diff(hp: float, cs: float, od: float, ar: float, slider_multiplier: float, model=None):
+	if sklearn_imported and ar != '':
+		if model is None:
+			with open(save_model_path, 'rb') as save:
+				model = pickle.load(save)
+		stars = round(model.predict([[hp, cs, od, ar, slider_multiplier]])[0], ndigits=2)
 	else:
 		stars = 0.
 
 	return stars
 
 
-def load_beatmap(filepath: str, lines: list = None, file_model=None) -> dict:
+def load_beatmap(filepath: str, lines: list = None, model=None) -> dict:
 	"""
 	A function to extract beatmap datas.
 	return a list with the datas of the beatmap : [version_fmt, Title, Artist, Creator, DifficultyName, HP, CS, OD, HR, time]
@@ -75,7 +69,7 @@ def load_beatmap(filepath: str, lines: list = None, file_model=None) -> dict:
 		'SliderMultiplier': difficulties[3][17:] if version_fmt <= 7 else difficulties[4][17:],
 		'SliderTickRate': difficulties[4][15:] if version_fmt <= 7 else difficulties[5][15:],
 		'time': int(time)}
-		data['Stars'] = stars_diff(data['HP'], data['CS'], data['OD'], data['AR'], data['SliderMultiplier'], file_model)
+		data['Stars'] = stars_diff(data['HP'], data['CS'], data['OD'], data['AR'], data['SliderMultiplier'], model)
 
 		return True, data
 	except IndexError:
