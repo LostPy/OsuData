@@ -4,7 +4,7 @@
  * Several modules are now optional
 
  * `osuDataClass.beatmap.Beatmap`
-   * `Beatmap.stars` attribute initialize with a estimated value.
+   * `Beatmap.stars` attribute initialize with a estimated value for versions of .osu file > 5.
 
  * `express.export`
    * Logs can be compacted with the argument: `compact_log`

@@ -82,13 +82,15 @@ def beatmapSet_objects(osu_path: str, n: int = None, compact_log: bool = False, 
 	list_dir = os.listdir(songspath)
 	if n is None or n > len(list_dir):
 		n = len(list_dir)
+	n_init = n
 	speed = 0.
 	current_speed = 0.
 	for i, name in enumerate(list_dir):
 		if os.path.isdir(os.path.join(songspath, name)):
 			start = time.time()
 			if display_progress:
-				progress_bar(i, n, info=os.path.join(songspath, name), length=60, suffix=f'Directories - ({current_speed} dir/s - mean: {speed} dir/s)', compact=compact_log)
+				i_real = i-(n-n_init)
+				progress_bar(i_real, n_init, start=0 if i == i_real else -1, info=os.path.join(songspath, name), length=60, suffix=f'Directories - ({current_speed} dir/s - mean: {speed} dir/s)', compact=compact_log)
 			beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), model=model)
 			beatmap_set_objects.append(beatmap_set)
 			errors += beatmap_set.errors
@@ -99,7 +101,7 @@ def beatmapSet_objects(osu_path: str, n: int = None, compact_log: bool = False, 
 				current_speed = round(1 / delay, ndigits=3)
 			if beatmap_set.ratio_error == 1.:
 				n += 1
-			if i == (n - 1):
+			if i == n_init:
 				break
 	return beatmap_set_objects, errors
 
