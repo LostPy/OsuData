@@ -166,4 +166,3 @@ def osu_to_excel(osu_path: str, excel_path: str = '', n: int = None, compact_log
 	else:
 		Logs.success('There is not error during the export data')
 	return excel_path
-

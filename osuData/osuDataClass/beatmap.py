@@ -180,4 +180,3 @@ class Beatmap:
 		beatmap = Beatmap(filepath)
 		beatmap.load(model=model)
 		return beatmap
-

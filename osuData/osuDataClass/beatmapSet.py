@@ -236,4 +236,3 @@ class BeatmapSet:
 		beatmap_set = BeatmapSet(folderpath)
 		beatmap_set.load(modes, model=model)
 		return beatmap_set
-

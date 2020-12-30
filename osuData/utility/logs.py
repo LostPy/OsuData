@@ -65,4 +65,3 @@ class Logs:
 			print(Logs.color_success + msg_log + Fore.RESET)
 		else:
 			print(msg_log)
-

@@ -6,7 +6,7 @@ Author: LostPy
 
 import os
 
-if not __name__ == "__main__":
+if __name__ != "__main__":
 	from .utility import Logs
 
 
