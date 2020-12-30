@@ -17,4 +17,3 @@ class BeatmapError(Exception):
 	def __str__(self):
 		"""Return the error message."""
 		return self.__repr__()
-

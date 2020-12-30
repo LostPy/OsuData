@@ -91,4 +91,3 @@ def folder_data(folerpath: str):
 
 def osu_data(folder):
 	pass
-
