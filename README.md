@@ -35,14 +35,24 @@ You can use `export` and `info` modules to work without object-oriented programm
  
  * License: [MIT License][license]
 
- * requirements: <a id="requirements"></a>
-   * [Python 3.x][py]
-   * [colorama][color] (for logs, you can replace logs by print)
-   * [pydub][pydub]
-   * [numpy][np]
-   * [scipy][scipy]
-   * [pandas][pd]
-   * [plotly][plotly]
+ * Requirements: <a id="requirements"></a>
+   * **Mandatory**
+     * [Python 3.x][py]
+     * [pydub][pydub] (To manipulate mp3 file and play music)
+     * [numpy][np] (Basis for data manipulation)
+     * [scipy][scipy] (To extract music data)
+     * [pandas][pd] (Basis for data manipulation)
+
+   * **Optionnal**
+     * [colorama][color] (For coulour logs)
+     * [plotly][plotly] or [seaborn][seaborn] (To visualize data)
+     * [sklearn][sklearn] (To initialize `stars` number with an estimate)
+
+ * Supported osu! file  
+ This package can read the `.osu` file (beatmap) with a version format of 5 or higher.
+ To check the osu file version, you can read the first line of a `.osu` file.
+
+   **Note:** The stars number of a beatmap is estimate with sklearn if sklearn is installed and if the beatmap file give the 'AR' stats (version of beatmap format > 5)
 
  * Utility link:
    * [osu! .osu file format][osu_format]
@@ -79,6 +89,7 @@ OsuData
 |      beatmap.py
 |      beatmapSet.py
 |      beatmapError.py
+|      load_data.py
 |
 └───__init__.py
 └─── script.py
@@ -157,6 +168,23 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    wav_path = express.mp3_to_wav('C:/osu!/Songs/a_folder_path/audio.mp3')
    ```
 
+ * `export.beatmapSet_objects` <a id="beatmapSetObjects"></a>
+   * **Description:** Export beatmaps set data from osu! folder in a list of [BeatmapSet object](#beatmapSet).
+
+   * **Arguments:**
+     * `osu_path`: *str* - path of osu! folder
+     * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
+     * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
+     * (`display_progress`): *bool*, default: `True` - if True, the progress is display in console with a progress bar and path of folders.
+
+   * **Return:** *list* -  list of [BeatmapSet](#beatmapSet).
+
+   ```py
+   from OsuData import express
+
+   list_set = express.beatmapSet_objects('C:/osu!/')
+   ```
+
  * `export.from_beatmap` <a id="fromBeatmap"></a>
    * **Description:** Export [beatmap data][metadata] in [DataFrame][pdDf] (one line).
 
@@ -188,10 +216,12 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    ```
 
  * `export.from_osu` <a id="fromOsu"></a>
-   * **Description:** Export all beatmaps data from osu! folder in [DataFrame][pdDf].
+   * **Description:** Export beatmaps set data from osu! folder in [DataFrame][pdDf].
 
    * **Arguments:**
-     * `folderpath`: *str* - path of osu! folder
+     * `osu_path`: *str* - path of osu! folder
+     * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
+     * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
      * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
 
    * **Return:** *tuple(DataFrame, list)* - (dataframe, errors) with errors the list of beatmap path where a error was found.
@@ -208,6 +238,8 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Arguments:**
      * `osu_path`: *str* - The osu folder path.
      * (`csv_path`): *str*, default: current path - path where the csv file is save.
+     * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
+     * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
      * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
 
    * **Return:** *str* - path of csv file.
@@ -224,6 +256,8 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Arguments:**
      * `osu_path`: *str* - The osu folder path.
      * (`excel_path`): *str*, default: current path - path where the excel file is save.
+     * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
+     * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
      * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
      * (Other arguments): You can use keywords arguments to pass at `to_excel` function of [pandas][pdToExcel].
 
@@ -253,7 +287,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      express.version_fmt(df)
    ```
    A distribution example for version_format
-   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/example/example-version_fmt.png)
+   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/im/example-version_fmt.png)
 
  * `info.difficulties` <a id="Difficulties"></a>
 
@@ -273,7 +307,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      df, errors = express.from_osu('C:/osu!/')
      express.date_add(df)
    ```
-   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/example/example-date_add.png)
+   ![date_add exemple](https://github.com/LostPy/OsuData/blob/main/im/example-date_add.png)
 
  * `info.beatmap_data` <a id="beatmapData"></a>
 
@@ -352,6 +386,7 @@ Attribute name | Type | Description | Default value
    * **Arguments:**
      * (`lines`): *list*, default: None - List of line (*str*) of beatmap file whithout `\n` char.
      * (`hitobjects`): *bool*, default: True - if `True` initalize also `hitobjects_data` attribute.
+     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
 
    * **Return:** none
 
@@ -396,6 +431,7 @@ Attribute name | Type | Description | Default value
 
    * **Arguments:**
      * `filepath`: *str* - The path of beatmap file.
+     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
    
    * **Return:**: *Beatmap* - A beatmap already initialize.
 
@@ -522,6 +558,7 @@ Attribute name | Type | Description | Default value
 
    * **Arguments:**
      * (`modes`): *list*, default `[0, 1, 2, 3]` - List of int wich represent [beatmap modes][metadata] to load
+     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
 
    * **Return:** none
 
@@ -668,7 +705,9 @@ Attribute name | Type | Description | Default value
 
    * **Arguments:**
      * `folderpath`: *str* - The path of folder song with beatmaps.
-     * `modes`: *list* - List of int wich represent beatmaps mode to load.
+     * (`modes`): *list*, default: `[0, 1, 2, 3]` - List of int wich represent beatmaps mode to load.
+     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
+
    * **Return:** *beatmapSet.BeatmapSet* - The BeatmapSet instance loaded.
 
    ```py
@@ -765,10 +804,12 @@ Attribute name | Type | Description | Default value
 [pydub]: https://github.com/jiaaro/pydub
 [np]: https://numpy.org/
 [scipy]: https://www.scipy.org/docs.html
-[pd]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_excel.html?highlight=to_excel#pandas.DataFrame.to_excel
+[pd]: https://pandas.pydata.org/
 [pdDf]: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
 [pdToExcel]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_excel.html
 [plotly]: https://plotly.com/
+[seaborn]: https://seaborn.pydata.org/
+[sklearn]: https://sklearn.org/
 [osu_format]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29
 [structure]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29#structure
 [general]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29#general

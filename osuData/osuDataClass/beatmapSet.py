@@ -6,13 +6,23 @@ Author: LostPy
 
 import os
 from datetime import datetime
+import pickle
 import pandas as pd
 from scipy.io import wavfile
+try:
+	from sklearn import svm
+	sklearn_imported = True
+except ImportError:
+	sklearn_imported = False
 
 import pydub
 from pydub.playback import play
 
 from .beatmap import Beatmap, load_beatmap
+try:
+	from ..bin import save_model_path
+except ValueError:  # when the __main__ is script.py
+	from bin import save_model_path
 
 
 class BeatmapSet:
@@ -126,12 +136,18 @@ class BeatmapSet:
 		"""Similar to the items method of dict objects but with all attributes of BeatmapSet."""
 		return [(key, value) for key, value in self.__dict__.items()]
 
-	def load(self, modes=[0, 1, 2, 3]):
+	def load(self, modes=[0, 1, 2, 3], model=None):
 		"""
 		Initialize BeatmapSet object.
 		Use `modes` argument if you want get specifics modes.
 		"""
 		self.date_add = datetime.fromtimestamp(os.path.getctime(self.folderpath)).strftime('%Y-%m-%d %H:%M:%S')
+		
+		if model is None and sklearn_imported:
+			with open(save_model_path, 'rb') as save:
+				model = pickle.load(save)
+		elif model is not None and not sklearn_imported:
+			model = None
 
 		first = True
 		for name in os.listdir(self.folderpath):
@@ -139,20 +155,21 @@ class BeatmapSet:
 			if os.path.isfile(path) and name.endswith((".osu", )):
 				if first:
 					with open(path, mode='r', encoding='utf8') as f:
-						lines = f.read().split('\n')
-						while '' in lines:
-							lines.remove('')
-					valid, data = load_beatmap(path, lines)
+						lines = [l for l in f.read().split('\n') if l != '']
+
+					valid, data = load_beatmap(path, lines, model)
 					if valid:
 						self.music_path = lines[2][lines[2].find(" ")+1:]
 						self.title = data['title']
 						self.artist = data['Artist']
 						first = False
-				beatmap = Beatmap.from_file(path)
+
+				beatmap = Beatmap.from_file(path, model=model)
 				if beatmap.valid and beatmap.mode in modes:
 					self.beatmaps.append(beatmap)
 				elif not beatmap.valid:
 					self.errors.append(path)
+
 		if len(self.errors) + len(self.beatmaps) > 0.:
 			self.ratio_error = len(self.errors) / (len(self.errors) + len(self.beatmaps))
 		else:
@@ -165,7 +182,7 @@ class BeatmapSet:
 			df['Artist'] = self.artist
 			df['date_add'] = self.date_add
 		else:
-			df = pd.DataFrame(columns=['version_fmt', 'countdown', 'mode', 'title', 'Creator', 'DifficultyName', 'HP', 'CS', 'OD', 'AR', 'SliderMultiplier', 'SliderTickRate', 'time', 'date_add'])
+			df = pd.DataFrame(columns=['version_fmt', 'countdown', 'mode', 'title', 'Creator', 'DifficultyName', 'Stars', 'HP', 'CS', 'OD', 'AR', 'SliderMultiplier', 'SliderTickRate', 'time', 'date_add'])
 		return df
 
 	def dataframe_hitobjects(self):
@@ -211,12 +228,12 @@ class BeatmapSet:
 		play(self.mp3_object())
 
 	@staticmethod
-	def from_folder(folderpath: str, modes=[0, 1, 2, 3]):
+	def from_folder(folderpath: str, modes=[0, 1, 2, 3], model=None):
 		"""
 		Return a BeatmapSet instance with all data find in folderpath.
 		Use `modes` argument if you want get specifics modes.
 		"""
-		music_osu = BeatmapSet(folderpath)
-		music_osu.load(modes)
-		return music_osu
+		beatmap_set = BeatmapSet(folderpath)
+		beatmap_set.load(modes, model=model)
+		return beatmap_set
 

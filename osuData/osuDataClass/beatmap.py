@@ -4,55 +4,10 @@ Project: OsuData
 Author: LostPy
 """
 
+from requests import ConnectionError
 import pandas as pd
 
-
-def load_beatmap(filepath: str, lines: list = None) -> dict:
-	"""
-	A function to extract beatmap datas.
-	return a list with the datas of the beatmap : [version_fmt, Title, Artist, Creator, DifficultyName, HP, CS, OD, HR, time]
-	"""
-	try:
-		if lines is None:
-			with open(filepath, 'r', encoding='utf-8') as beatmap:
-				lines = beatmap.read().split('\n')
-				while '' in lines:
-					lines.remove('')
-		if '[Editor]' in lines:
-			general = lines[lines.index('[General]')+1:lines.index('[Editor]')]
-		else:
-			general = lines[lines.index('[General]')+1:lines.index('[Metadata]')]
-		metadatas = lines[lines.index('[Metadata]')+1:lines.index('[Difficulty]')]
-		difficulties = lines[lines.index('[Difficulty]')+1:lines.index('[Events]')]
-		time = lines[-1].split(',')[2]
-		version_fmt = int(lines[0][lines[0].find("v")+1:])
-		if version_fmt <= 5 and len(general) < 7:
-			mode = 0
-		elif version_fmt <= 5:
-			mode = int(general[6][-1]) if general[6][:4].lower() == 'mode' else 0
-		else:
-			mode = int(general[6][-1])
-
-		data = {
-		'version_fmt': version_fmt,
-		'countdown': int(general[3][-1]),
-		'mode': mode,
-		'title': metadatas[0][6:],
-		'Artist': metadatas[1][7:] if version_fmt < 10 else metadatas[2][7:],
-		'Creator': metadatas[2][8:] if version_fmt < 10 else metadatas[4][8:],
-		'DifficultyName': metadatas[3][8:] if version_fmt < 10 else metadatas[5][8:],
-		'HP': difficulties[0][12:],
-		'CS': difficulties[1][11:],
-		'OD': difficulties[2][18:],
-		'AR': difficulties[3][13:] if version_fmt > 7 else '',
-		'SliderMultiplier': difficulties[3][17:] if version_fmt <= 7 else difficulties[4][17:],
-		'SliderTickRate': difficulties[4][15:] if version_fmt <= 7 else difficulties[5][15:],
-		'time': int(time)}
-
-		return True, data
-	except IndexError:
-		return False, [filepath]
-
+from .load_data import load_beatmap
 
 # Class:
 class Beatmap:
@@ -144,15 +99,13 @@ class Beatmap:
 		"""Return a list of tuple (name_attribute, value_attribute) of Beatmap object."""
 		return self.__dict__.items()
 
-	def load(self, lines: list = None, hitobjects=True):
+	def load(self, lines: list = None, hitobjects=True, model=None):
 		"""Load all data of beatmap and initialize the object."""
-		if lines is None:
-			with open(self.path, 'r', encoding='utf8') as beatmap:
-				lines = beatmap.read().split('\n')
-				while '' in lines:
-					lines.remove('')
 
-		valid, data = load_beatmap(self.path, lines=lines)
+		with open(self.path, 'r', encoding='utf8') as beatmap:
+			lines = [l for l in beatmap.read().split('\n') if l != '']
+		valid, data = load_beatmap(self.path, lines=lines, model=model)
+
 		if valid:
 			self.name = data['title']
 			self.version_fmt = data['version_fmt']
@@ -165,6 +118,7 @@ class Beatmap:
 			self.difficulties['AR'] = data['AR']
 			self.difficulties['SliderMultiplier'] = data['SliderMultiplier']
 			self.difficulties['SliderTickRate'] = data['SliderTickRate']
+			self.stars = data['Stars']
 			self.time = data['time']
 			self.diffname = data['DifficultyName']
 			if hitobjects:
@@ -210,6 +164,7 @@ class Beatmap:
 		'title': self.name,
 		'Creator': self.creator,
 		'DifficultyName': self.diffname,
+		'Stars': self.stars if self.stars > 0 else '',
 		'HP': self.difficulties['HP'],
 		'CS': self.difficulties['CS'],
 		'OD': self.difficulties['OD'],
@@ -220,9 +175,9 @@ class Beatmap:
 		return pd.DataFrame(data=data, index=range(1), columns=data.keys())
 
 	@staticmethod
-	def from_file(filepath: str):
+	def from_file(filepath: str, model=None):
 		"""Return a Beatmap instance with all data find in filepath."""
 		beatmap = Beatmap(filepath)
-		beatmap.load()
+		beatmap.load(model=model)
 		return beatmap
 
