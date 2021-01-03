@@ -136,7 +136,7 @@ class BeatmapSet:
 		"""Similar to the items method of dict objects but with all attributes of BeatmapSet."""
 		return [(key, value) for key, value in self.__dict__.items()]
 
-	def load(self, modes=[0, 1, 2, 3], model=None):
+	def load(self, modes=[0, 1, 2, 3], count_hitobjects: bool = True, hitobjects=True, model=None):
 		"""
 		Initialize BeatmapSet object.
 		Use `modes` argument if you want get specifics modes.
@@ -153,18 +153,19 @@ class BeatmapSet:
 		for name in os.listdir(self.folderpath):
 			path = os.path.join(self.folderpath, name)
 			if os.path.isfile(path) and name.endswith((".osu", )):
-				if first:
-					with open(path, mode='r', encoding='utf8') as f:
-						lines = [l for l in f.read().split('\n') if l != '']
+				with open(path, mode='r', encoding='utf8') as f:
+					lines = [l for l in f.read().split('\n') if l != '']
 
-					valid, data = load_beatmap(path, lines, model)
+				if first:
+					valid, data = load_beatmap(path, lines, count_hitobjects=False, model)
 					if valid:
 						self.music_path = lines[2][lines[2].find(" ")+1:]
 						self.title = data['title']
-						self.artist = data['Artist']
+						self.artist = data['artist']
 						first = False
 
-				beatmap = Beatmap.from_file(path, model=model)
+				beatmap = Beatmap(path)
+				beatmap.load(lines=lines, count_hitobjects=count_hitobjects, hitobjects=hitobjects, model=model)
 				if beatmap.valid and beatmap.mode in modes:
 					self.beatmaps.append(beatmap)
 				elif not beatmap.valid:
@@ -228,11 +229,11 @@ class BeatmapSet:
 		play(self.mp3_object())
 
 	@staticmethod
-	def from_folder(folderpath: str, modes=[0, 1, 2, 3], model=None):
+	def from_folder(folderpath: str, modes=[0, 1, 2, 3], count_hitobjects: bool = True, hitobjects: bool = True, model=None):
 		"""
 		Return a BeatmapSet instance with all data find in folderpath.
 		Use `modes` argument if you want get specifics modes.
 		"""
 		beatmap_set = BeatmapSet(folderpath)
-		beatmap_set.load(modes, model=model)
+		beatmap_set.load(modes, count_hitobjects=count_hitobjects, hitobjects=hitobjects, model=model)
 		return beatmap_set

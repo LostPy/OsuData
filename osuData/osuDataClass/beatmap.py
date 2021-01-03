@@ -27,6 +27,9 @@ class Beatmap:
 		self.diffname = None if 'diffname' not in kwargs else kwargs['diffname']
 		self.stars = 0
 		self.difficulties = {'HP': None, 'CS': None, 'OD': None, 'AR': None, 'SliderMultiplier': None, 'SliderTickRate': None}
+		self.count_normal = 0
+		self.count_slider = 0
+		self.count_spinner = 0
 		self.hitobjects_data = None
 
 	def __repr__(self):
@@ -99,28 +102,28 @@ class Beatmap:
 		"""Return a list of tuple (name_attribute, value_attribute) of Beatmap object."""
 		return self.__dict__.items()
 
-	def load(self, lines: list = None, hitobjects=True, model=None):
+	def load(self, lines: list = None, count_hitobjects: bool = True, hitobjects=True, model=None):
 		"""Load all data of beatmap and initialize the object."""
 
 		with open(self.path, 'r', encoding='utf8') as beatmap:
 			lines = [l for l in beatmap.read().split('\n') if l != '']
-		valid, data = load_beatmap(self.path, lines=lines, model=model)
+		valid, data = load_beatmap(self.path, lines=lines, count_hitobjects=count_hitobjects, model=model)
 
 		if valid:
 			self.name = data['title']
 			self.version_fmt = data['version_fmt']
 			self.countdown = data['countdown']
 			self.mode = data['mode']
-			self.creator = data['Creator']
-			self.difficulties['HP'] = data['HP']
-			self.difficulties['CS'] = data['CS']
-			self.difficulties['OD'] = data['OD']
-			self.difficulties['AR'] = data['AR']
-			self.difficulties['SliderMultiplier'] = data['SliderMultiplier']
-			self.difficulties['SliderTickRate'] = data['SliderTickRate']
-			self.stars = data['Stars']
+			self.creator = data['creator']
+			self.difficulties['HP'] = data['hp']
+			self.difficulties['CS'] = data['cs']
+			self.difficulties['OD'] = data['od']
+			self.difficulties['AR'] = data['ar']
+			self.difficulties['SliderMultiplier'] = data['slider_multiplier']
+			self.difficulties['SliderTickRate'] = data['slider_tick_rate']
+			self.stars = data['stars']
 			self.time = data['time']
-			self.diffname = data['DifficultyName']
+			self.diffname = data['difficulty_name']
 			if hitobjects:
 				self.load_hitobjects(lines)
 		self.valid = valid
@@ -158,10 +161,10 @@ class Beatmap:
 	def to_dataframe(self):
 		"""Return a DataFrame with metadatas of a beatmap."""
 		data = {
-		'version_fmt': self.version_fmt,
-		'countdown': self.countdown,
-		'mode': self.mode,
-		'title': self.name,
+		'Version_fmt': self.version_fmt,
+		'Countdown': self.countdown,
+		'Mode': self.mode,
+		'Title': self.name,
 		'Creator': self.creator,
 		'DifficultyName': self.diffname,
 		'Stars': self.stars if self.stars > 0 else '',
@@ -171,12 +174,15 @@ class Beatmap:
 		'AR': self.difficulties['AR'],
 		'SliderMultiplier': self.difficulties['SliderMultiplier'],
 		'SliderTickRate': self.difficulties['SliderTickRate'],
-		'time': self.time}
+		'CountNormal': self.count_normal,
+		'CountSlider': self.count_slider,
+		'CountSpinner': self.count_spinner,
+		'Time': self.time}
 		return pd.DataFrame(data=data, index=range(1), columns=data.keys())
 
 	@staticmethod
-	def from_file(filepath: str, model=None):
+	def from_file(filepath: str, count_hitobjects: bool = True, hitobjects: bool = True, model=None):
 		"""Return a Beatmap instance with all data find in filepath."""
 		beatmap = Beatmap(filepath)
-		beatmap.load(model=model)
+		beatmap.load(count_hitobjects=count_hitobjects, hitobjects=hitobjects, model=model)
 		return beatmap

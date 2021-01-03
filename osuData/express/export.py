@@ -29,7 +29,7 @@ except ValueError:  # When script.py is the __main__
 
 
 def to_csv(folderpath: str, csv_path: str = ''):
-	beatmap_set = BeatmapSet.from_folder(folderpath)
+	beatmap_set = BeatmapSet.from_folder(folderpath, hitobjects=False)
 	if beatmap_set.ratio_error < 1.:
 		csv_path = f'./{beatmap_set.title}.csv' if csv_path == '' else csv_path
 		beatmap_set.to_csv(csv_path)
@@ -61,7 +61,7 @@ def mp3_to_wav(mp3_path: str, wav_path: str = ''):
 	return wav_path
 
 
-def beatmapSet_objects(osu_path: str, n: int = None, compact_log: bool = False, display_progress: bool = True):
+def beatmapSet_objects(osu_path: str, n: int = None, hitobjects=False, compact_log: bool = False, display_progress: bool = True):
 	"""
 	A function to extract osu! beatmaps data and return the list of BeatmapSet object
 	and the list path of beatmaps where there is a error.
@@ -91,7 +91,7 @@ def beatmapSet_objects(osu_path: str, n: int = None, compact_log: bool = False, 
 			if display_progress:
 				i_real = i-(n-n_init)
 				progress_bar(i_real, n_init, start=0 if i == i_real else -1, info=os.path.join(songspath, name), length=60, suffix=f'Directories - ({current_speed} dir/s - mean: {speed} dir/s)', compact=compact_log)
-			beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), model=model)
+			beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), hitobjects=hitobjects, model=model)
 			beatmap_set_objects.append(beatmap_set)
 			errors += beatmap_set.errors
 			end = time.time()
