@@ -17,7 +17,7 @@ setup(
 	author='LostPy',
 	description="A small framework to work with osu! data",
 	long_description=__doc__,
-    package_data = {'osuData': ['bin/*.bin']}
+    package_data = {'': ['LICENSE.txt']'osuData': ['bin/*.bin']},
 	include_package_data=True,
 	url='https://github.com/LostPy/OsuData',
 	classifiers=[
