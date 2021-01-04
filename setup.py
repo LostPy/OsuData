@@ -13,10 +13,11 @@ For more informations, read the README.md file."""
 
 setup(
 	name='osuData',
-	version='2.0.20200103',
+	version='2.0.20200104',
 	author='LostPy',
 	description="A small framework to work with osu! data",
 	long_description=__doc__,
+    package_dir = {'osuData': './osuData'},
     package_data = {'': ['LICENSE.txt'], 'osuData': ['bin/*.bin']},
 	include_package_data=True,
 	url='https://github.com/LostPy/OsuData',
