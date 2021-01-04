@@ -38,6 +38,7 @@ You can use `export` and `info` modules to work without object-oriented programm
  * Requirements: <a id="requirements"></a>
    * **Mandatory**
      * [Python 3.x][py]
+     * [requests][req] (To execute https requests)
      * [pydub][pydub] (To manipulate mp3 file and play music)
      * [numpy][np] (Basis for data manipulation)
      * [scipy][scipy] (To extract music data)
@@ -46,13 +47,13 @@ You can use `export` and `info` modules to work without object-oriented programm
    * **Optionnal**
      * [colorama][color] (For coulour logs)
      * [plotly][plotly] or [seaborn][seaborn] (To visualize data)
-     * [sklearn][sklearn] (To initialize `stars` number with an estimate)
+     * [scikit-learn][sklearn] (To initialize `stars` number without http requests)
 
  * Supported osu! file  
  This package can read the `.osu` file (beatmap) with a version format of 5 or higher.
  To check the osu file version, you can read the first line of a `.osu` file.
 
-   **Note:** The stars number of a beatmap is estimate with sklearn if sklearn is installed and if the beatmap file give the 'AR' stats (version of beatmap format > 7)
+   **Note:** If you do not specify a [api][api] [key][api-key], the stars number of a beatmap is estimate with [sklearn][sklearn] if [sklearn][sklearn] is installed and if the beatmap file give the 'AR' stats (version of beatmap format > 7)
 
  * Utility link:
    * [osu! .osu file format][osu_format]
@@ -78,7 +79,7 @@ OR
 ## Documentation <a id="documentation"></a>
 ### Structure <a id="structure"></a>
 ```
-OsuData
+osuData
 └─── express
 |      __init__.py
 |      export.py
@@ -102,7 +103,7 @@ This section explain `export` and `info` modules and the `script` file.
 With `script.py` you can visualize someone stats of osu_folder, export all beatmaps from osu! folder in a csv file or xlsx file, and visualize Dataframe of a beatmap or beatmaps from a folder.
  1. Open your favourite console
 
- 2. Go to OsuData's directory : `cd C:/path/of/OsuData`
+ 2. Go to osuData's directory : `cd C:/path/of/osuData`
 
  3. Execute `script.py` file with Python 3 : `python3 script.py` or `python.exe script.py`
 
@@ -121,18 +122,21 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
 
  5. Expects the programme to finish, if the action is a export in csv or xlsx file, the save path is print at the end.
 
+**Note:** This script don't use http request, the stars value is estimated.
+
 #### Export <a id="export"></a>
  * `export.to_csv` <a id="exportToCsv"></a>
    * **Description:** Basic function to export a folder containing beatmaps in *csv* file. Use `osu_to_csv` to export all beatmaps from osu folder.
 
    * **Arguments:**
      * `folderpath`: *str* - The path of folder with beatmaps to export in csv
+     * (`api_key`): *str* - the [api key][api-key] for the connection to the [osu!api][api], default: Data is loaded from osu! files.
      * (`csv_path`): *str* - path of save, default: current folder.
 
    * **Return:** *str* - csv path
 
    ```py
-   from OsuData import express
+   from osuData import express
 
    dataframe = express.to_csv('C:/osu!/Songs/a_folder_path/')
    ```
@@ -142,13 +146,14 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
 
    * **Arguments:**
      * `folderpath`: *str* - The path of folder with beatmaps to export in csv
+     * (`api_key`): *str* - the [api key][api-key] for the connection to the [osu!api][api], default: Data is loaded from osu! files.
      * (`excel_path`): *str* - path of save, default: current folder.
      * (Other arguments): You can use keywords arguments to pass at `to_excel` function of [pandas][pdToExcel].
 
    * **Return:** *str* - Excel path
 
    ```py
-   from OsuData import express
+   from osuData import express
 
    dataframe = express.to_excel('C:/osu!/Songs/a_folder_path/')
    ```
@@ -163,7 +168,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Return:** *str* - wav path
 
    ```py
-   from OsuData import express
+   from osuData import express
 
    wav_path = express.mp3_to_wav('C:/osu!/Songs/a_folder_path/audio.mp3')
    ```
@@ -173,14 +178,16 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
 
    * **Arguments:**
      * `osu_path`: *str* - path of osu! folder
+     * (`api_key`): *str* - the [api key][api-key] for the connection to the [osu!api][api], default: Data is loaded from osu! files.
      * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
+     * (`hitobjects`): *bool*, default: `False` - If True, the hit object data will be loaded.
      * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
      * (`display_progress`): *bool*, default: `True` - if True, the progress is display in console with a progress bar and path of folders.
 
    * **Return:** *list* -  list of [BeatmapSet](#beatmapSet).
 
    ```py
-   from OsuData import express
+   from osuData import express
 
    list_set = express.beatmapSet_objects('C:/osu!/')
    ```
@@ -196,7 +203,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
      * *(False, beatmap_path)* if there is a error in beatmap file, beatmap_path is a *str*.
 
    ```py
-   from OsuData import express
+   from osuData import express
 
    valid, dataframe = express.from_beatmap('C:/osu!/Songs/a_folder_path/a_beatmap.osu')
    ```
@@ -206,11 +213,12 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
 
    * **Arguments:**
      * `folderpath`: *str* - path of the folder containing a beatmap or more
+     * (`api_key`): *str* - the [api key][api-key] for the connection to the [osu!api][api], default: Data is loaded from osu! files.
 
    * **Return:** *tuple(DataFrame, list)* - (dataframe, errors) with errors the list of beatmap path where a error was found.
 
    ```py
-   from OsuData import express
+   from osuData import express
 
    dataframe, errors = express.from_folder('C:/osu!/Songs/a_folder_path/')
    ```
@@ -220,6 +228,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
 
    * **Arguments:**
      * `osu_path`: *str* - path of osu! folder
+     * (`api_key`): *str* - the [api key][api-key] for the connection to the [osu!api][api], default: Data is loaded from osu! files.
      * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
      * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
      * (`display_progress`): *bool*, default: True - if True, the progress is display in console with a progress bar and path of folders.
@@ -227,7 +236,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Return:** *tuple(DataFrame, list)* - (dataframe, errors) with errors the list of beatmap path where a error was found.
 
    ```py
-   from OsuData import express
+   from osuData import express
 
    dataframe, errors = express.from_osu('C:/osu!/')
    ```
@@ -237,6 +246,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
 
    * **Arguments:**
      * `osu_path`: *str* - The osu folder path.
+     * (`api_key`): *str* - the [api key][api-key] for the connection to the [osu!api][api], default: Data is loaded from osu! files.
      * (`csv_path`): *str*, default: current path - path where the csv file is save.
      * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
      * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
@@ -245,7 +255,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Return:** *str* - path of csv file.
 
    ```py
-     from OsuData import express
+     from osuData import express
 
      csv_path = express.osu_to_csv('C:/osu!/')
    ```
@@ -255,6 +265,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
 
    * **Arguments:**
      * `osu_path`: *str* - The osu folder path.
+     * (`api_key`): *str* - the [api key][api-key] for the connection to the [osu!api][api], default: Data is loaded from osu! files.
      * (`excel_path`): *str*, default: current path - path where the excel file is save.
      * (`n`): *int*, default: `None` - if True, export all beatmaps set from osu! folder, else export n beatmaps set from osu! folder.
      * (`compact_log`): *bool*, default: `False` - If True: No more than 3 lines are displayed at the same time.
@@ -264,7 +275,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Return:** *str* - path of excel file.
 
    ```py
-     from OsuData import express
+     from osuData import express
 
      excel_path = express.osu_to_excel('C:/osu!/')
    ```
@@ -281,7 +292,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Return:** none
 
    ```py
-     from OsuData import express
+     from osuData import express
 
      df, errors = express.from_osu('C:/osu!/')
      express.version_fmt(df)
@@ -302,7 +313,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Return:** none
 
    ```py
-     from OsuData import express
+     from osuData import express
 
      df, errors = express.from_osu('C:/osu!/')
      express.date_add(df)
@@ -325,7 +336,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
    * **Return:** none
 
    ```py
-     from OsuData import express
+     from osuData import express
 
      express.play_music('C:/osu!/Songs/osu_folder_song')
    ```
@@ -334,7 +345,7 @@ With `script.py` you can visualize someone stats of osu_folder, export all beatm
 Use the OOP to work with beatmap or music folder (group of beatmap with a music) like objects.  
 To easily create a Beatmap object or a BeatmapSet object, use :
 ```py
-from OsuData.osuDataClass import Beatmap, BeatmapSet
+from osuData.osuDataClass import Beatmap, BeatmapSet
 
 # To create a Beatmap object
 beatmap = Beatmap.from_file('C:/osu!/Songs/folder_song/a_beatmap.osu')
@@ -344,8 +355,8 @@ beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
 ```
 #### Beatmap <a id="beatmap"></a>
 Class to represent a beatmap with this data.
-`class OsuData.osuDataClass.beatmap.Beatmap`  
-To import this class, you can use `from OsuData.osuDataClass import Beatmap`.
+`class osuData.osuDataClass.beatmap.Beatmap`  
+To import this class, you can use `from osuData.osuDataClass import Beatmap`.
 
 ##### Attributes
 For more information, you can check the [osu! file format][osu_format] on the osu!wiki.
@@ -363,6 +374,9 @@ Attribute name | Type | Description | Default value
 `diffname` | *str* | The difficulty name, equivalent of "version" in [osu file][metadata] | None
 `stars` | *float* | The global difficulty stat | 0
 `difficulties` | *dict* | Dictionnaty with the [differents stats][difficulty] of a beatmap (`HP`, `OD`, `CS`, `AR`, `SliderMultiplier`, `SliderTickRate`) | None
+`count_normal` | *int* | Like in the [osu!api][api], it's the number of simple (normal) hit objects | 0
+`count_slider` | *int* | Like in the [osu!api][api], it's the number of slider | 0
+`count_spinner` | *int* | Like in the [osu!api][api], it's the number of spinner | 0
 `hitobjects_data` | *pandas.DataFrame* | A dataframe with all [hit-ojects][hit-objects] | None
 
 ##### Methods
@@ -374,7 +388,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *dict* - The dictionary with [metadata][metadata] of the beatmap.
 
    ```py
-   from OsuData.osuDataClass import Beatmap
+   from osuData.osuDataClass import Beatmap
 
    beatmap = Beatmap.from_file('C:/osu!/Songs/folder_song/a_beatmap.osu')
    metadata = beatmap.metadata()
@@ -391,7 +405,7 @@ Attribute name | Type | Description | Default value
    * **Return:** none
 
    ```py
-   from OsuData.osuDataClass import Beatmap
+   from osuData.osuDataClass import Beatmap
 
    beatmap = Beatmap('C:/osu!/Songs/folder_song/a_beatmap.osu')
    beatmap.load()
@@ -406,7 +420,7 @@ Attribute name | Type | Description | Default value
    * **Return:** none
 
    ```py
-   from OsuData.osuDataClass import Beatmap
+   from osuData.osuDataClass import Beatmap
 
    beatmap = Beatmap('C:/osu!/Songs/folder_song/a_beatmap.osu')
    beatmap.load_hitobjects()
@@ -420,7 +434,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *pandas.DataFrame* - A [dataframe][pdDf] with metadata.
 
    ```py
-   from OsuData.osuDataClass import Beatmap
+   from osuData.osuDataClass import Beatmap
 
    beatmap = Beatmap.from_file('C:/osu!/Songs/folder_song/a_beatmap.osu')
    beatmap.to_dataframe()
@@ -436,7 +450,7 @@ Attribute name | Type | Description | Default value
    * **Return:**: *Beatmap* - A beatmap already initialize.
 
    ```py
-   from OsuData.osuDataClass import Beatmap
+   from osuData.osuDataClass import Beatmap
 
    beatmap = Beatmap.from_file('C:/osu!/Songs/folder_song/a_beatmap.osu')
    ```
@@ -449,14 +463,15 @@ Attribute name | Type | Description | Default value
 
 #### BeatmapSet <a id="beatmapSet"></a>
 Class to represent a folder of beatmaps with a same song with this data.
-`class OsuData.osuDataClass.beatmapSet.BeatmapSet`  
-To import this class, you can use `from OsuData.osuDataClass import BeatmapSet`.
+`class osuData.osuDataClass.beatmapSet.BeatmapSet`  
+To import this class, you can use `from osuData.osuDataClass import BeatmapSet`.
 
 ##### Attributes
 
 Attribute name | Type | Description | Default value
 -------------- |:----:| ----------- |:-------------:
 `folderpath` | *str* | The path of song folder with beatmaps |
+`id` | *int* | ID of BeatmapSet, equivalent to `beatmapset_id` in the [osu!api][api] | None
 `music_path` | *str* | The path of mp3 file | None
 `title` | *str* | [Title][metadata] of music/beatmaps | None
 `artist` | *str* | The [artist name][metadata] of the music| None
@@ -475,7 +490,7 @@ Attribute name | Type | Description | Default value
    * **Return:** none
 
    ```py
-   from OsuData.osuDataClass import Beatmap, BeatmapSet
+   from osuData.osuDataClass import Beatmap, BeatmapSet
 
    beatmap = Beatmap.from_file('C:/osu!/Songs/folder_song/a_beatmap.osu')
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/other_folder_song/')
@@ -491,7 +506,7 @@ Attribute name | Type | Description | Default value
    * **Return:** `Beatmap` - The [beatmap](#beatmap) instance delete.
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    beatmap = beatmap_set.pop()
@@ -505,7 +520,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *dict* - A dictionary with metadata of BeatmapSet instance.
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    metadata = beatmap_set.metadata()
@@ -519,7 +534,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *list* - List of attributes names (*str*).
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    attributes = beatmap_set.keys()
@@ -533,7 +548,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *list* - List of attributes value.
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    values = beatmap_set.values()
@@ -547,23 +562,42 @@ Attribute name | Type | Description | Default value
    * **Return:** *list* - List of tuple with a couple `(key, value)`
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    items = beatmap_set.items()
    ```
-
- * `BeatmapSet.load`  <a id="beatmapSetLoad"></a>
-   * **Description:** Initialize the BeatmapSet instance by loading the [beatmaps](#beatmap) of the folder. 
+ * `BeatmapSet.load_from_files` <a id="beatmapSetLoadFile"></a>
+   * **Description:** Initialize the BeatmapSet instance by loading the [beatmaps](#beatmap) of the folder with the beatmaps files. Preferably uses [`BeatmapSet.load`](#beatmapSetLoad) method.
 
    * **Arguments:**
-     * (`modes`): *list*, default `[0, 1, 2, 3]` - List of int wich represent [beatmap modes][metadata] to load
+     * (`mode`): *int*, default: `None` = all modes - The int wich represent [beatmap modes][metadata] to load.
+     * (`hitobjects`): *bool*, default: `True` - If True, load [hit objects data][hit-objects].
      * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
 
    * **Return:** none
 
+ * `BeatmapSet.load_from_http` <a id="beatmapSetLoadHttp"></a>
+   * **Description:** Initialize the BeatmapSet instance by loading the [beatmaps](#beatmap) of the folder with the osu!api data. Preferably uses [`BeatmapSet.load`](#beatmapSetLoad) method.
+
+   * **Arguments:**
+     * `api_key`: *str* - The [api key][api-key] to access the [osu!api][api].
+     * (`mode`): *int*, default: `None` = all modes - The int wich represent [beatmap modes][metadata] to load.
+     * (`hitobjects`): *bool*, default: `True` - If True, load [hit objects data][hit-objects].
+
+   * **Return:** none
+
+ * `BeatmapSet.load`  <a id="beatmapSetLoad"></a>
+   * **Description:** Initialize the BeatmapSet instance by loading the [beatmaps](#beatmap) of the folder. This is to simplify the use of methods [`BeatmapSet.load_from_files`](#beatmapSetLoadFile) and [`BeatmapSet.load_from_http`](#beatmapSetLoadHttp)
+
+   * **Arguments:**
+     * (`api_key`): *str*, default: `None` - The [api key][api-key] to access the [osu!api][api]. If `None`, it's the [`BeatmapSet.load_from_files`](#beatmapSetLoadFile) method which is executed else it's [`BeatmapSet.load_from_http`](#beatmapSetLoadHttp) method.
+     * (Other arguments): Use keywords arguments to pass at [`BeatmapSet.load_from_files`](#beatmapSetLoadFile) or at [`BeatmapSet.load_from_http`](#beatmapSetLoadHttp).
+
+   * **Return:** none
+
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet('C:/osu!/Songs/folder_song/')
    beatmap_set.load()
@@ -577,7 +611,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *pandas.DataFrame* - The dataframe with all [beatmaps](#beatmap) [metadata][metadata].
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    df = beatmap_set.to_dataframe()
@@ -591,7 +625,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *pandas.DataFrame* - The dataframe of [hit-objects][hit-objects] data
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    df_hitobjects = beatmap_set.dataframe_hitobjects()
@@ -606,7 +640,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *str* - the path where the file is save.
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    beatmap_set.to_csv()
@@ -623,7 +657,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *str* - the path where the file is save.
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    beatmap_set.to_excel()
@@ -637,7 +671,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *pydub.MP3* - The [mp3 instance][pydub] of the mp3 file of BeatmapSet.
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    mp3 = beatmap_set.mp3_object()
@@ -652,7 +686,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *str* - The path where the wav file is save (The folder of BeatmapSet instance).
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    wav_path = beatmap_set.to_wav()
@@ -666,7 +700,7 @@ Attribute name | Type | Description | Default value
    * **Return:** (*int*, *list*) - The [rate and AudioData][pydub] from mp3 file.
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    rate, audData = beatmap_set.data_music()
@@ -680,7 +714,7 @@ Attribute name | Type | Description | Default value
    * **Return:** *pandas.DataFrame* - The dataframe of mp3 file data, with 2 columns [L, R]
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    df_music = beatmap_set.music_to_dataframe()
@@ -694,7 +728,7 @@ Attribute name | Type | Description | Default value
    * **Return:** none
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    beatmap_set.play_music()
@@ -705,13 +739,15 @@ Attribute name | Type | Description | Default value
 
    * **Arguments:**
      * `folderpath`: *str* - The path of folder song with beatmaps.
-     * (`modes`): *list*, default: `[0, 1, 2, 3]` - List of int wich represent beatmaps mode to load.
+     * (`api_key`): *str*, default: `None` - The [api key][api-key] to access the [osu!api][api]. If `None`, it's the [`BeatmapSet.load_from_files`](#beatmapSetLoadFile) method which is executed else it's [`BeatmapSet.load_from_http`](#beatmapSetLoadHttp) method.
+     * (`mode`): *int*, default: `None` = all modes - The int wich represent [beatmap modes][metadata] to load.
+     * (`hitobjects`): *bool*, default: `True` - If True, load [hit objects data][hit-objects].
      * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
 
    * **Return:** *beatmapSet.BeatmapSet* - The BeatmapSet instance loaded.
 
    ```py
-   from OsuData.osuDataClass import BeatmapSet
+   from osuData.osuDataClass import BeatmapSet
 
    beatmap_set = BeatmapSet.from_folder('C:/osu!/Songs/folder_song/')
    ```
@@ -724,6 +760,7 @@ Attribute name | Type | Description | Default value
  * `del(a[index])`: Delete the beatmap at `index` (in `beatmaps` list) from BeatmapSet instance `a`
  * `a[index]`: Return the beatmap at `index`
  * `a[index] = beatmap`: insert `beatmap` at the index
+ * `a[start:stop:step]`: slicing in `beatmaps` list.
 
 ## Table of functions <a id="tableFunctions"></a>
 ### Functions <a id="tableFunctions1"></a>
@@ -764,6 +801,8 @@ Attribute name | Type | Description | Default value
    * [`keys`](#beatmapSetKeys)
    * [`values`](#beatmapSetValues)
    * [`items`](#beatmapSetItems)
+   * [`load_from_files`](#beatmapSetLoadFile)
+   * [`load_from_http`](#beatmapSetLoadHttp)
    * [`load`](#beatmapSetLoad)
    * [`to_dataframe`](#beatmapSetToDataframe)
    * [`dataframe_hitobjects`](#beatmapSetDataFrameHitobjects)
@@ -800,6 +839,7 @@ Attribute name | Type | Description | Default value
 
 
 [py]: https://www.python.org/
+[req]: https://requests.readthedocs.io/en/master/
 [color]: https://pypi.org/project/colorama/
 [pydub]: https://github.com/jiaaro/pydub
 [np]: https://numpy.org/
@@ -817,5 +857,7 @@ Attribute name | Type | Description | Default value
 [difficulty]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29#difficulty
 [hit-objects]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29#hit-objects
 [osu_db_format]: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Db_%28file_format%29
-[license]: https://github.com/LostPy/OsuData/blob/main/LICENSE
+[api]: https://github.com/ppy/osu-api/wiki
+[api-key]: https://osu.ppy.sh/p/api/
+[license]: https://github.com/LostPy/osuData/blob/main/LICENSE
 [me]: https://osu.ppy.sh/users/11187592

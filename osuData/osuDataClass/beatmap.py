@@ -7,7 +7,7 @@ Author: LostPy
 from requests import ConnectionError
 import pandas as pd
 
-from .load_data import load_beatmap
+from .load_data import load_beatmap, beatmaps_from_http
 
 # Class:
 class Beatmap:
@@ -20,7 +20,7 @@ class Beatmap:
 		self.valid = False  # False if the beatmap is not initialize or if a error was found in file during the load.
 		self.name = None if 'name' not in kwargs else kwargs['name']
 		self.version_fmt = None if 'version_fmt' not in kwargs else kwargs['version_fmt']
-		self.countdown = 1 if 'countdown' not in kwargs else kwargs['countdown']
+		self.countdown = -1 if 'countdown' not in kwargs else kwargs['countdown']  # -1 when the beatmap is not load
 		self.mode = 0 if 'mode' not in kwargs else kwargs['mode']
 		self.creator = None if 'creator' not in kwargs else kwargs['creator']
 		self.time = 0
@@ -102,12 +102,12 @@ class Beatmap:
 		"""Return a list of tuple (name_attribute, value_attribute) of Beatmap object."""
 		return self.__dict__.items()
 
-	def load(self, lines: list = None, count_hitobjects: bool = True, hitobjects=True, model=None):
+	def load(self, lines: list = None, hitobjects=True, model=None):
 		"""Load all data of beatmap and initialize the object."""
 
 		with open(self.path, 'r', encoding='utf8') as beatmap:
 			lines = [l for l in beatmap.read().split('\n') if l != '']
-		valid, data = load_beatmap(self.path, lines=lines, count_hitobjects=count_hitobjects, model=model)
+		valid, data = load_beatmap(self.path, lines=lines, model=model)
 
 		if valid:
 			self.name = data['title']
@@ -124,6 +124,7 @@ class Beatmap:
 			self.stars = data['stars']
 			self.time = data['time']
 			self.diffname = data['difficulty_name']
+
 			if hitobjects:
 				self.load_hitobjects(lines)
 		self.valid = valid
@@ -132,7 +133,7 @@ class Beatmap:
 		"""Load hitobjects data and set hitobects_data attribute."""
 		if lines is None:
 			with open(self.path, 'r', encoding='utf8') as f:
-				lines = f.read().split('\n')
+				lines = [l for l in f.read().split('\n') if l != '']
 		version_fmt = int(lines[0][lines[0].find('v')+1:])
 		lines = lines[lines.index('[HitObjects]')+1:]
 		data = {'X': [],
@@ -140,7 +141,7 @@ class Beatmap:
 				'time': [],
 				'type': [],
 				'objectParams': []}
-
+		print(self.path)
 		for l in lines:
 			data_objects = l.split(',')
 			data['X'].append(int(data_objects[0]))
@@ -181,8 +182,8 @@ class Beatmap:
 		return pd.DataFrame(data=data, index=range(1), columns=data.keys())
 
 	@staticmethod
-	def from_file(filepath: str, count_hitobjects: bool = True, hitobjects: bool = True, model=None):
+	def from_file(filepath: str, hitobjects: bool = True, model=None):
 		"""Return a Beatmap instance with all data find in filepath."""
 		beatmap = Beatmap(filepath)
-		beatmap.load(count_hitobjects=count_hitobjects, hitobjects=hitobjects, model=model)
+		beatmap.load(hitobjects=hitobjects, model=model)
 		return beatmap

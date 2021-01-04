@@ -18,7 +18,9 @@ except ImportError:
 import pydub
 from pydub.playback import play
 
-from .beatmap import Beatmap, load_beatmap
+from .beatmap import Beatmap
+from .load_data import load_beatmap, beatmaps_from_http
+
 try:
 	from ..bin import save_model_path
 except ValueError:  # when the __main__ is script.py
@@ -26,8 +28,9 @@ except ValueError:  # when the __main__ is script.py
 
 
 class BeatmapSet:
-	def __init__(self, folderpath: str, **kwargs):
+	def __init__(self, folderpath: str, id_: int = None):
 		self.folderpath = folderpath
+		self.id = id_
 		self.music_path = None
 		self.title = None
 		self.artist = None
@@ -136,13 +139,17 @@ class BeatmapSet:
 		"""Similar to the items method of dict objects but with all attributes of BeatmapSet."""
 		return [(key, value) for key, value in self.__dict__.items()]
 
-	def load(self, modes=[0, 1, 2, 3], count_hitobjects: bool = True, hitobjects=True, model=None):
+	def load_from_files(self, mode: int = None, hitobjects=True, model=None):
 		"""
-		Initialize BeatmapSet object.
+		Initialize BeatmapSet object from files of beatmaps.
 		Use `modes` argument if you want get specifics modes.
 		"""
 		self.date_add = datetime.fromtimestamp(os.path.getctime(self.folderpath)).strftime('%Y-%m-%d %H:%M:%S')
-		
+		try:
+			self.id = int(os.path.basename(self.folderpath).split(' ')[0])
+		except ValueError as e:
+			pass
+
 		if model is None and sklearn_imported:
 			with open(save_model_path, 'rb') as save:
 				model = pickle.load(save)
@@ -157,7 +164,7 @@ class BeatmapSet:
 					lines = [l for l in f.read().split('\n') if l != '']
 
 				if first:
-					valid, data = load_beatmap(path, lines, count_hitobjects=False, model)
+					valid, data = load_beatmap(path, lines, model=model)
 					if valid:
 						self.music_path = lines[2][lines[2].find(" ")+1:]
 						self.title = data['title']
@@ -165,8 +172,8 @@ class BeatmapSet:
 						first = False
 
 				beatmap = Beatmap(path)
-				beatmap.load(lines=lines, count_hitobjects=count_hitobjects, hitobjects=hitobjects, model=model)
-				if beatmap.valid and beatmap.mode in modes:
+				beatmap.load(lines=lines, hitobjects=hitobjects, model=model)
+				if beatmap.valid and (mode is None or beatmap.mode == mode):
 					self.beatmaps.append(beatmap)
 				elif not beatmap.valid:
 					self.errors.append(path)
@@ -176,14 +183,71 @@ class BeatmapSet:
 		else:
 			self.ratio_error = 1.  # 100% error because there isn't beatmaps
 
+	def load_from_http(self, api_key: str, mode: int = None, hitobjects: bool = True):
+		"""
+		Initialize BeatmapSet object from https (with osu!api).
+		Use `mode` argument if you want get a specifics mode.
+		"""
+		try:
+			self.id = int(os.path.basename(self.folderpath).split(' ')[0])
+		except ValueError as e:
+			self.ratio_error = 1.
+			raise ValueError("this beatmaps set is probably not published, impossible to find it by https queries.")
+		
+		self.date_add = datetime.fromtimestamp(os.path.getctime(self.folderpath)).strftime('%Y-%m-%d %H:%M:%S')
+		beatmaps = beatmaps_from_http(api_key, beatmapset_id=self.id, mode=mode)
+		try:
+			self.title = beatmaps['title'][0]
+			self.artist = beatmaps['artist'][0]
+			for i in beatmaps.index:
+				line = beatmaps.iloc[i]
+				path = os.path.join(self.folderpath, f"{line['artist']} - {line['title']} ({line['creator']}) [{line['version']}].osu")
+				beatmap = Beatmap(path)
+				beatmap.valid = True
+				beatmap.name = line['title']
+				beatmap.mode = int(line['mode'])
+				beatmap.creator = line['creator']
+				beatmap.diffname = line['version']
+				beatmap.time = int(line['hit_length']) * 1000
+				beatmap.stars = float(line['difficultyrating'])
+				beatmap.difficulties = {'HP': line['diff_drain'], 'CS': line['diff_size'],
+				'OD': line['diff_overall'], 'AR': line['diff_approach'],
+				'SliderMultiplier': line['diff_speed'], 'SliderTickRate': line['diff_aim']}
+				beatmap.count_normal = line['count_normal']
+				beatmap.count_slider = line['count_slider']
+				beatmap.count_spinner = line['count_spinner']
+				if hitobjects:
+					beatmap.load_hitobjects()
+				self.beatmaps.append(beatmap)
+		except KeyError:
+			self.ratio_error = 1.
+			self.errors.append(self.folderpath)
+
+	def load(self, api_key: str = None, **kwargs):
+		"""
+		Initialize BeatmapSet object from https (with osu!api) or files of beatmaps.
+		Use keywords arguments of method `load_from_files` or `load_from_http`.
+
+		If api_key is None, load BeatmapSet from files, else load BeatmapSet from http
+		"""
+		if api_key is None:
+			self.load_from_files(**kwargs)
+		else:
+			if 'model' in kwargs:
+				del(kwargs['model'])
+			self.load_from_http(api_key=api_key, **kwargs)
+
 	def to_dataframe(self):
 		"""Export BeatmapSet object in a DataFrame."""
 		if len(self.beatmaps) > 0:
 			df = pd.concat([beatmap.to_dataframe() for beatmap in self.beatmaps], axis=0).reset_index(drop=True)
 			df['Artist'] = self.artist
-			df['date_add'] = self.date_add
+			df['Date_Add'] = self.date_add
+			df[df['Countdown'] == -1]['Countdown'] = ''
 		else:
-			df = pd.DataFrame(columns=['version_fmt', 'countdown', 'mode', 'title', 'Creator', 'DifficultyName', 'Stars', 'HP', 'CS', 'OD', 'AR', 'SliderMultiplier', 'SliderTickRate', 'time', 'date_add'])
+			df = pd.DataFrame(columns=['Version_fmt', 'Countdown', 'Mode', 'Title',
+				'Creator', 'DifficultyName', 'Stars', 'HP', 'CS', 'OD', 'AR', 'SliderMultiplier',
+				'SliderTickRate', 'CountNormal', 'CountSlider', 'CountSpinner', 'Time', 'Date_Add'])
 		return df
 
 	def dataframe_hitobjects(self):
@@ -229,11 +293,11 @@ class BeatmapSet:
 		play(self.mp3_object())
 
 	@staticmethod
-	def from_folder(folderpath: str, modes=[0, 1, 2, 3], count_hitobjects: bool = True, hitobjects: bool = True, model=None):
+	def from_folder(folderpath: str, api_key: str = None, mode=None, hitobjects: bool = True, model=None):
 		"""
 		Return a BeatmapSet instance with all data find in folderpath.
-		Use `modes` argument if you want get specifics modes.
+		If `modes` contain several osu! modes (2 or more) and than `api_key` is not None, all beatmaps are export.
 		"""
 		beatmap_set = BeatmapSet(folderpath)
-		beatmap_set.load(modes, count_hitobjects=count_hitobjects, hitobjects=hitobjects, model=model)
+		beatmap_set.load(api_key=api_key, mode=mode, hitobjects=hitobjects, model=model)
 		return beatmap_set
