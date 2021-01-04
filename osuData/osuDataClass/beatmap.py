@@ -141,7 +141,6 @@ class Beatmap:
 				'time': [],
 				'type': [],
 				'objectParams': []}
-		print(self.path)
 		for l in lines:
 			data_objects = l.split(',')
 			data['X'].append(int(data_objects[0]))
