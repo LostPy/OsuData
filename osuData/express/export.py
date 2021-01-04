@@ -7,7 +7,6 @@ Author: LostPy
 import os
 import time
 import pickle
-from requests import ConnectionError
 
 import pandas as pd
 import pydub
