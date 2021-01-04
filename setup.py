@@ -13,7 +13,7 @@ For more informations, read the README.md file."""
 
 setup(
 	name='osuData',
-	version='1.0.20201229',
+	version='2.0.20200103',
 	author='LostPy',
 	description="A small framework to work with osu! data",
 	long_description=__doc__,

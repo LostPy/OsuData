@@ -7,7 +7,7 @@ Author: LostPy
 from requests import ConnectionError
 import pandas as pd
 
-from .load_data import load_beatmap
+from .load_data import load_beatmap, beatmaps_from_http
 
 # Class:
 class Beatmap:
@@ -20,13 +20,16 @@ class Beatmap:
 		self.valid = False  # False if the beatmap is not initialize or if a error was found in file during the load.
 		self.name = None if 'name' not in kwargs else kwargs['name']
 		self.version_fmt = None if 'version_fmt' not in kwargs else kwargs['version_fmt']
-		self.countdown = 1 if 'countdown' not in kwargs else kwargs['countdown']
+		self.countdown = -1 if 'countdown' not in kwargs else kwargs['countdown']  # -1 when the beatmap is not load
 		self.mode = 0 if 'mode' not in kwargs else kwargs['mode']
 		self.creator = None if 'creator' not in kwargs else kwargs['creator']
 		self.time = 0
 		self.diffname = None if 'diffname' not in kwargs else kwargs['diffname']
 		self.stars = 0
 		self.difficulties = {'HP': None, 'CS': None, 'OD': None, 'AR': None, 'SliderMultiplier': None, 'SliderTickRate': None}
+		self.count_normal = 0
+		self.count_slider = 0
+		self.count_spinner = 0
 		self.hitobjects_data = None
 
 	def __repr__(self):
@@ -111,16 +114,17 @@ class Beatmap:
 			self.version_fmt = data['version_fmt']
 			self.countdown = data['countdown']
 			self.mode = data['mode']
-			self.creator = data['Creator']
-			self.difficulties['HP'] = data['HP']
-			self.difficulties['CS'] = data['CS']
-			self.difficulties['OD'] = data['OD']
-			self.difficulties['AR'] = data['AR']
-			self.difficulties['SliderMultiplier'] = data['SliderMultiplier']
-			self.difficulties['SliderTickRate'] = data['SliderTickRate']
-			self.stars = data['Stars']
+			self.creator = data['creator']
+			self.difficulties['HP'] = data['hp']
+			self.difficulties['CS'] = data['cs']
+			self.difficulties['OD'] = data['od']
+			self.difficulties['AR'] = data['ar']
+			self.difficulties['SliderMultiplier'] = data['slider_multiplier']
+			self.difficulties['SliderTickRate'] = data['slider_tick_rate']
+			self.stars = data['stars']
 			self.time = data['time']
-			self.diffname = data['DifficultyName']
+			self.diffname = data['difficulty_name']
+
 			if hitobjects:
 				self.load_hitobjects(lines)
 		self.valid = valid
@@ -129,7 +133,7 @@ class Beatmap:
 		"""Load hitobjects data and set hitobects_data attribute."""
 		if lines is None:
 			with open(self.path, 'r', encoding='utf8') as f:
-				lines = f.read().split('\n')
+				lines = [l for l in f.read().split('\n') if l != '']
 		version_fmt = int(lines[0][lines[0].find('v')+1:])
 		lines = lines[lines.index('[HitObjects]')+1:]
 		data = {'X': [],
@@ -137,7 +141,7 @@ class Beatmap:
 				'time': [],
 				'type': [],
 				'objectParams': []}
-
+		print(self.path)
 		for l in lines:
 			data_objects = l.split(',')
 			data['X'].append(int(data_objects[0]))
@@ -158,10 +162,10 @@ class Beatmap:
 	def to_dataframe(self):
 		"""Return a DataFrame with metadatas of a beatmap."""
 		data = {
-		'version_fmt': self.version_fmt,
-		'countdown': self.countdown,
-		'mode': self.mode,
-		'title': self.name,
+		'Version_fmt': self.version_fmt,
+		'Countdown': self.countdown,
+		'Mode': self.mode,
+		'Title': self.name,
 		'Creator': self.creator,
 		'DifficultyName': self.diffname,
 		'Stars': self.stars if self.stars > 0 else '',
@@ -171,12 +175,15 @@ class Beatmap:
 		'AR': self.difficulties['AR'],
 		'SliderMultiplier': self.difficulties['SliderMultiplier'],
 		'SliderTickRate': self.difficulties['SliderTickRate'],
-		'time': self.time}
+		'CountNormal': self.count_normal,
+		'CountSlider': self.count_slider,
+		'CountSpinner': self.count_spinner,
+		'Time': self.time}
 		return pd.DataFrame(data=data, index=range(1), columns=data.keys())
 
 	@staticmethod
-	def from_file(filepath: str, model=None):
+	def from_file(filepath: str, hitobjects: bool = True, model=None):
 		"""Return a Beatmap instance with all data find in filepath."""
 		beatmap = Beatmap(filepath)
-		beatmap.load(model=model)
+		beatmap.load(hitobjects=hitobjects, model=model)
 		return beatmap

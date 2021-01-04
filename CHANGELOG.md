@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## V2.0.20200104
+Updated with https requests!
+ * The data of beatmaps can be loaded with http requests and the [osu!api][api]. To do this, use the `api_key` argument (In function and method of load data). For more information, look the [wiki][wiki].
+
+**Next update:** an optimisation of the model for the calculation of the value without the api.
+
 ## V1.0.20201229
  * Several modules are now optional
 
@@ -15,3 +21,5 @@
  * The info module is not finished
 
 [readme]: https://github.com/LostPy/OsuData/blob/main/README.md
+[api]: https://github.com/ppy/osu-api/wiki
+[wiki]: https://github.com/LostPy/OsuData/wiki
