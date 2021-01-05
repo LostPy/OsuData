@@ -20,12 +20,10 @@ try:
 	from ..utility import Logs, progress_bar
 	from ..osuDataClass import Beatmap, BeatmapSet
 	from ..osuDataClass.beatmapError import BeatmapError
-	from ..bin import save_model_path
 except ValueError:  # When script.py is the __main__
 	from utility import Logs, progress_bar
 	from osuDataClass import Beatmap, BeatmapSet
 	from osuDataClass.beatmapError import BeatmapError
-	from bin import save_model_path
 
 
 def to_csv(folderpath: str, api_key: str = None, csv_path: str = ''):
@@ -65,12 +63,6 @@ def beatmapSet_objects(osu_path: str, api_key: str = None, n: int = None, hitobj
 	A function to extract osu! beatmaps data and return the list of BeatmapSet object
 	and the list path of beatmaps where there is a error.
 	"""
-	if sklearn_imported:
-		with open(save_model_path, 'rb') as save:
-			model = pickle.load(save)
-	else:
-		model = None
-
 	beatmap_set_objects = []
 	errors = []
 	if display_progress:
@@ -95,7 +87,7 @@ def beatmapSet_objects(osu_path: str, api_key: str = None, n: int = None, hitobj
 					i_real = i-(n-n_init)
 					progress_bar(i_real, n_init, start=0 if i == i_real else -1, info=os.path.join(songspath, name), length=60, suffix=f'Directories - ({current_speed} dir/s - mean: {speed} dir/s)', compact=compact_log)
 				try:
-					beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), api_key=api_key, hitobjects=hitobjects, model=model)
+					beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), api_key=api_key, hitobjects=hitobjects)
 					beatmap_set_objects.append(beatmap_set)
 				except ValueError:  # BeatmapSet not published
 					beatmap_set = BeatmapSet(os.path.join(songspath, name))

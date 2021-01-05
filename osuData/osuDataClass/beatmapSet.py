@@ -21,11 +21,6 @@ from pydub.playback import play
 from .beatmap import Beatmap
 from .load_data import load_beatmap, beatmaps_from_http
 
-try:
-	from ..bin import save_model_path
-except ValueError:  # when the __main__ is script.py
-	from bin import save_model_path
-
 
 class BeatmapSet:
 	def __init__(self, folderpath: str, id_: int = None):
@@ -150,12 +145,6 @@ class BeatmapSet:
 		except ValueError as e:
 			pass
 
-		if model is None and sklearn_imported:
-			with open(save_model_path, 'rb') as save:
-				model = pickle.load(save)
-		elif model is not None and not sklearn_imported:
-			model = None
-
 		first = True
 		for name in os.listdir(self.folderpath):
 			path = os.path.join(self.folderpath, name)
@@ -164,7 +153,7 @@ class BeatmapSet:
 					lines = [l for l in f.read().split('\n') if l != '']
 
 				if first:
-					valid, data = load_beatmap(path, lines, model=model)
+					valid, data = load_beatmap(path, lines)
 					if valid:
 						self.music_path = lines[2][lines[2].find(" ")+1:]
 						self.title = data['title']
@@ -172,7 +161,7 @@ class BeatmapSet:
 						first = False
 
 				beatmap = Beatmap(path)
-				beatmap.load(lines=lines, hitobjects=hitobjects, model=model)
+				beatmap.load(lines=lines, hitobjects=hitobjects)
 				if beatmap.valid and (mode is None or beatmap.mode == mode):
 					self.beatmaps.append(beatmap)
 				elif not beatmap.valid:

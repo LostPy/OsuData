@@ -14,17 +14,21 @@ try:
 except ImportError:
 	sklearn_imported = False
 try:
-	from ..bin import save_model_path
+	from ..bin import path_modelA, path_modelB
 except ValueError:  # when the __main__ is script.py
-	from bin import save_model_path
+	from bin import path_modelA, path_modelB
 
 
-def stars_diff(hp: float, cs: float, od: float, ar: float, slider_multiplier: float, model=None):
-	if sklearn_imported and ar != '':
-		if model is None:
-			with open(save_model_path, 'rb') as save:
+def stars_diff(hp: float, cs: float, od: float, ar: float, slider_multiplier: float, slider_tick_rate: float, model=None):
+	if sklearn_imported:
+		if model is None and ar != '':
+			with open(path_modelA, 'rb') as save:
 				model = pickle.load(save)
-		stars = round(model.predict([[hp, cs, od, ar, slider_multiplier]])[0], ndigits=2)
+			stars = round(model.predict([[hp, cs, od, ar, slider_multiplier, slider_tick_rate]])[0], ndigits=2)
+		elif model is None:
+			with open(path_modelB, 'rb') as save:
+				model = pickle.load(save)
+			stars = round(model.predict([[od, slider_multiplier, slider_tick_rate]])[0], ndigits=2)
 	else:
 		stars = 0.
 
@@ -72,7 +76,7 @@ def load_beatmap(filepath: str, lines: list = None, model=None) -> dict:
 		'slider_multiplier': difficulties[3][17:] if version_fmt <= 7 else difficulties[4][17:],
 		'slider_tick_rate': difficulties[4][15:] if version_fmt <= 7 else difficulties[5][15:],
 		'time': int(time)}
-		data['stars'] = stars_diff(data['hp'], data['cs'], data['od'], data['ar'], data['slider_multiplier'], model)
+		data['stars'] = stars_diff(data['hp'], data['cs'], data['od'], data['ar'], data['slider_multiplier'], data['slider_tick_rate'], model)
 
 		return True, data
 	except IndexError:
