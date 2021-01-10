@@ -14,24 +14,30 @@ try:
 except ImportError:
 	sklearn_imported = False
 try:
-	from ..bin import save_model_path
+	from ..bin import path_modelA, path_modelB
 except ValueError:  # when the __main__ is script.py
-	from bin import save_model_path
+	from bin import path_modelA, path_modelB
 
 
-def stars_diff(hp: float, cs: float, od: float, ar: float, slider_multiplier: float, model=None):
-	if sklearn_imported and ar != '':
-		if model is None:
-			with open(save_model_path, 'rb') as save:
-				model = pickle.load(save)
-		stars = round(model.predict([[hp, cs, od, ar, slider_multiplier]])[0], ndigits=2)
+def stars_diff(hp: float, cs: float, od: float, ar: float, slider_multiplier: float, slider_tick_rate: float, modelA=None, modelB=None):
+	if sklearn_imported:
+		if ar != '':
+			if modelA is None:
+				with open(path_modelA, 'rb') as save:
+					modelA = pickle.load(save)
+			stars = round(modelA.predict([[hp, cs, od, ar, slider_multiplier, slider_tick_rate]])[0], ndigits=3)
+		else:
+			if modelB is None:
+				with open(path_modelB, 'rb') as save:
+					modelB = pickle.load(save)
+			stars = round(modelB.predict([[od, slider_multiplier, slider_tick_rate]])[0], ndigits=3)
 	else:
 		stars = 0.
 
 	return stars
 
 
-def load_beatmap(filepath: str, lines: list = None, model=None) -> dict:
+def load_beatmap(filepath: str, lines: list = None, modelA=None, modelB=None) -> dict:
 	"""
 	A function to extract beatmap datas.
 	return a list with the datas of the beatmap : [version_fmt, Title, Artist, Creator, DifficultyName, HP, CS, OD, HR, time]
@@ -72,7 +78,7 @@ def load_beatmap(filepath: str, lines: list = None, model=None) -> dict:
 		'slider_multiplier': difficulties[3][17:] if version_fmt <= 7 else difficulties[4][17:],
 		'slider_tick_rate': difficulties[4][15:] if version_fmt <= 7 else difficulties[5][15:],
 		'time': int(time)}
-		data['stars'] = stars_diff(data['hp'], data['cs'], data['od'], data['ar'], data['slider_multiplier'], model)
+		data['stars'] = stars_diff(data['hp'], data['cs'], data['od'], data['ar'], data['slider_multiplier'], data['slider_tick_rate'], modelA, modelB)
 
 		return True, data
 	except IndexError:

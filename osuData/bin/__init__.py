@@ -8,4 +8,6 @@ from os import path
 from inspect import getfile
 import osuData
 
-save_model_path = path.join(path.dirname(getfile(osuData)), 'bin/save_model.bin')
+path_modelA = path.join(path.dirname(getfile(osuData)), 'bin/model_A.bin')
+path_modelB = path.join(path.dirname(getfile(osuData)), 'bin/model_B.bin')
+

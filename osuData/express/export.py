@@ -20,12 +20,12 @@ try:
 	from ..utility import Logs, progress_bar
 	from ..osuDataClass import Beatmap, BeatmapSet
 	from ..osuDataClass.beatmapError import BeatmapError
-	from ..bin import save_model_path
+	from ..bin import path_modelA, path_modelB
 except ValueError:  # When script.py is the __main__
 	from utility import Logs, progress_bar
 	from osuDataClass import Beatmap, BeatmapSet
 	from osuDataClass.beatmapError import BeatmapError
-	from bin import save_model_path
+	from bin import path_modelA, path_modelB
 
 
 def to_csv(folderpath: str, api_key: str = None, csv_path: str = ''):
@@ -65,11 +65,14 @@ def beatmapSet_objects(osu_path: str, api_key: str = None, n: int = None, hitobj
 	A function to extract osu! beatmaps data and return the list of BeatmapSet object
 	and the list path of beatmaps where there is a error.
 	"""
-	if sklearn_imported:
-		with open(save_model_path, 'rb') as save:
-			model = pickle.load(save)
+	if api_key is None and sklearn_imported:
+		with open(path_modelA, 'rb') as f:
+			modelA = pickle.load(f)
+		with open(path_modelB, 'rb') as f:
+			modelB = pickle.load(f)
 	else:
-		model = None
+		modelA = None
+		modelB = None
 
 	beatmap_set_objects = []
 	errors = []
@@ -92,10 +95,10 @@ def beatmapSet_objects(osu_path: str, api_key: str = None, n: int = None, hitobj
 			if os.path.isdir(os.path.join(songspath, name)):
 				start = time.time()
 				if display_progress:  # update of the progress bar
-					i_real = i-(n-n_init)
+					i_real = i-(n-n_init) if n < len(list_dir) else i
 					progress_bar(i_real, n_init, start=0 if i == i_real else -1, info=os.path.join(songspath, name), length=60, suffix=f'Directories - ({current_speed} dir/s - mean: {speed} dir/s)', compact=compact_log)
 				try:
-					beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), api_key=api_key, hitobjects=hitobjects, model=model)
+					beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), api_key=api_key, hitobjects=hitobjects, modelA=modelA, modelB=modelB)
 					beatmap_set_objects.append(beatmap_set)
 				except ValueError:  # BeatmapSet not published
 					beatmap_set = BeatmapSet(os.path.join(songspath, name))
