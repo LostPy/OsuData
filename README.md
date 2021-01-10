@@ -367,7 +367,7 @@ Attribute name | Type | Description | Default value
 `valid` | *bool* | boolean to indicate if the beatmap is not initialize or if there is a error in beatmap file. | False
 `name` | *str* | Name of beatmap, equivalent at `Title` in [osu file][metadata] | None
 `version_fmt` | *int* | The [version of beatmap file][structure] | None
-`countdown` | *int* | Speed of the [countdown][general] before the first hit object (0 = no countdown, 1 = normal, 2 = half, 3 = double) | 1
+`countdown` | *int* | Speed of the [countdown][general] before the first hit object (0 = no countdown, 1 = normal, 2 = half, 3 = double) | None
 `mode` | *int* | [Game mode of the beatmap][general] (0 = osu!, 1 = osu!taiko, 2 = osu!catch, 3 = osu!mania) | 0
 `creator` | *str* | The [creator][metadata]'s username of the beatmap | None
 `time` | *int* | Time of the beatmap in ms | 0
@@ -400,7 +400,8 @@ Attribute name | Type | Description | Default value
    * **Arguments:**
      * (`lines`): *list*, default: None - List of line (*str*) of beatmap file whithout `\n` char.
      * (`hitobjects`): *bool*, default: True - if `True` initalize also `hitobjects_data` attribute.
-     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
+     * (`modelA`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/model_A.bin` is used.
+     * (`modelB`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps if the beatmap hasn't `AR` stat. By default, the model save in file `osuData/bin/model_B.bin` is used.
 
    * **Return:** none
 
@@ -445,7 +446,8 @@ Attribute name | Type | Description | Default value
 
    * **Arguments:**
      * `filepath`: *str* - The path of beatmap file.
-     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
+     * (`modelA`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/model_A.bin` is used.
+     * (`modelB`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps if the beatmap hasn't `AR` stat. By default, the model save in file `osuData/bin/model_B.bin` is used.
    
    * **Return:**: *Beatmap* - A beatmap already initialize.
 
@@ -573,7 +575,8 @@ Attribute name | Type | Description | Default value
    * **Arguments:**
      * (`mode`): *int*, default: `None` = all modes - The int wich represent [beatmap modes][metadata] to load.
      * (`hitobjects`): *bool*, default: `True` - If True, load [hit objects data][hit-objects].
-     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
+     * (`modelA`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/model_A.bin` is used.
+     * (`modelB`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps if the beatmap hasn't `AR` stat. By default, the model save in file `osuData/bin/model_B.bin` is used.
 
    * **Return:** none
 
@@ -742,7 +745,8 @@ Attribute name | Type | Description | Default value
      * (`api_key`): *str*, default: `None` - The [api key][api-key] to access the [osu!api][api]. If `None`, it's the [`BeatmapSet.load_from_files`](#beatmapSetLoadFile) method which is executed else it's [`BeatmapSet.load_from_http`](#beatmapSetLoadHttp) method.
      * (`mode`): *int*, default: `None` = all modes - The int wich represent [beatmap modes][metadata] to load.
      * (`hitobjects`): *bool*, default: `True` - If True, load [hit objects data][hit-objects].
-     * (`model`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/save_model.bin` is used.
+     * (`modelA`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps. By default, the model save in file `osuData/bin/model_A.bin` is used.
+     * (`modelB`): *sklearn.svm*, default: None - The model to estimate the stars value of beatmaps if the beatmap hasn't `AR` stat. By default, the model save in file `osuData/bin/model_B.bin` is used.
 
    * **Return:** *beatmapSet.BeatmapSet* - The BeatmapSet instance loaded.
 

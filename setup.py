@@ -13,7 +13,7 @@ For more informations, read the README.md file."""
 
 setup(
 	name='osuData',
-	version='2.0.20200104',
+	version='2.20200110',
 	author='LostPy',
 	description="A small framework to work with osu! data",
 	long_description=__doc__,
@@ -23,7 +23,7 @@ setup(
 	url='https://github.com/LostPy/OsuData',
 	classifiers=[
         "Programming Language :: Python",
-        "Development Status :: 1 - In progress",
+        "Development Status :: Functionnal - improvement in progress",
         "License :: MIT",
         "Natural Language :: French",
         "Operating System :: OS Independent",

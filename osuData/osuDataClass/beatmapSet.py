@@ -20,6 +20,10 @@ from pydub.playback import play
 
 from .beatmap import Beatmap
 from .load_data import load_beatmap, beatmaps_from_http
+try:
+	from ..bin import path_modelA, path_modelB
+except ValueError:  # when the __main__ is script.py
+	from bin import path_modelA, path_modelB
 
 
 class BeatmapSet:
@@ -134,7 +138,7 @@ class BeatmapSet:
 		"""Similar to the items method of dict objects but with all attributes of BeatmapSet."""
 		return [(key, value) for key, value in self.__dict__.items()]
 
-	def load_from_files(self, mode: int = None, hitobjects=True, model=None):
+	def load_from_files(self, mode: int = None, hitobjects=True, modelA=None, modelB=None):
 		"""
 		Initialize BeatmapSet object from files of beatmaps.
 		Use `modes` argument if you want get specifics modes.
@@ -144,6 +148,12 @@ class BeatmapSet:
 			self.id = int(os.path.basename(self.folderpath).split(' ')[0])
 		except ValueError as e:
 			pass
+		if modelA is None and sklearn_imported:
+			with open(path_modelA, 'rb') as f:
+				modelA = pickle.load(f)
+		if modelB is None and sklearn_imported:
+			with open(path_modelB, 'rb') as f:
+				modelB = pickle.load(f)
 
 		first = True
 		for name in os.listdir(self.folderpath):
@@ -152,7 +162,7 @@ class BeatmapSet:
 				with open(path, mode='r', encoding='utf8') as f:
 					lines = [l for l in f.read().split('\n') if l != '']
 
-				if first:
+				if first:  # Initialize BeatmapSet data
 					valid, data = load_beatmap(path, lines)
 					if valid:
 						self.music_path = lines[2][lines[2].find(" ")+1:]
@@ -161,7 +171,7 @@ class BeatmapSet:
 						first = False
 
 				beatmap = Beatmap(path)
-				beatmap.load(lines=lines, hitobjects=hitobjects)
+				beatmap.load(lines=lines, hitobjects=hitobjects, modelA=modelA, modelB=modelB)
 				if beatmap.valid and (mode is None or beatmap.mode == mode):
 					self.beatmaps.append(beatmap)
 				elif not beatmap.valid:
@@ -222,8 +232,10 @@ class BeatmapSet:
 		if api_key is None:
 			self.load_from_files(**kwargs)
 		else:
-			if 'model' in kwargs:
-				del(kwargs['model'])
+			if 'modelA' in kwargs:
+				del(kwargs['modelA'])
+			if 'modelB' in kwargs:
+				del(kwargs['modelB'])
 			self.load_from_http(api_key=api_key, **kwargs)
 
 	def to_dataframe(self):
@@ -282,11 +294,11 @@ class BeatmapSet:
 		play(self.mp3_object())
 
 	@staticmethod
-	def from_folder(folderpath: str, api_key: str = None, mode=None, hitobjects: bool = True, model=None):
+	def from_folder(folderpath: str, api_key: str = None, mode=None, hitobjects: bool = True, modelA=None, modelB=None):
 		"""
 		Return a BeatmapSet instance with all data find in folderpath.
 		If `modes` contain several osu! modes (2 or more) and than `api_key` is not None, all beatmaps are export.
 		"""
 		beatmap_set = BeatmapSet(folderpath)
-		beatmap_set.load(api_key=api_key, mode=mode, hitobjects=hitobjects, model=model)
+		beatmap_set.load(api_key=api_key, mode=mode, hitobjects=hitobjects, modelA=modelA, modelB=modelB)
 		return beatmap_set

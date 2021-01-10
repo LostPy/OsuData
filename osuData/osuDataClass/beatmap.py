@@ -20,7 +20,7 @@ class Beatmap:
 		self.valid = False  # False if the beatmap is not initialize or if a error was found in file during the load.
 		self.name = None if 'name' not in kwargs else kwargs['name']
 		self.version_fmt = None if 'version_fmt' not in kwargs else kwargs['version_fmt']
-		self.countdown = -1 if 'countdown' not in kwargs else kwargs['countdown']  # -1 when the beatmap is not load
+		self.countdown = None if 'countdown' not in kwargs else kwargs['countdown']  # -1 when the beatmap is not load
 		self.mode = 0 if 'mode' not in kwargs else kwargs['mode']
 		self.creator = None if 'creator' not in kwargs else kwargs['creator']
 		self.time = 0
@@ -102,12 +102,12 @@ class Beatmap:
 		"""Return a list of tuple (name_attribute, value_attribute) of Beatmap object."""
 		return self.__dict__.items()
 
-	def load(self, lines: list = None, hitobjects=True, model=None):
+	def load(self, lines: list = None, hitobjects=True, modelA=None, modelB=None):
 		"""Load all data of beatmap and initialize the object."""
 
 		with open(self.path, 'r', encoding='utf8') as beatmap:
 			lines = [l for l in beatmap.read().split('\n') if l != '']
-		valid, data = load_beatmap(self.path, lines=lines, model=model)
+		valid, data = load_beatmap(self.path, lines=lines, modelA=modelA, modelB=modelB)
 
 		if valid:
 			self.name = data['title']
@@ -181,8 +181,8 @@ class Beatmap:
 		return pd.DataFrame(data=data, index=range(1), columns=data.keys())
 
 	@staticmethod
-	def from_file(filepath: str, hitobjects: bool = True, model=None):
+	def from_file(filepath: str, hitobjects: bool = True, modelA=None, modelB=None):
 		"""Return a Beatmap instance with all data find in filepath."""
 		beatmap = Beatmap(filepath)
-		beatmap.load(hitobjects=hitobjects, model=model)
+		beatmap.load(hitobjects=hitobjects, modelA=modelA, modelB=modelB)
 		return beatmap
