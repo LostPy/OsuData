@@ -25,7 +25,9 @@ class Beatmap:
 		self.creator = None if 'creator' not in kwargs else kwargs['creator']
 		self.time = 0
 		self.diffname = None if 'diffname' not in kwargs else kwargs['diffname']
-		self.stars = 0
+		self.stars = 0.
+		self.diff_speed = 0.
+		self.diff_aim = 0.
 		self.difficulties = {'HP': None, 'CS': None, 'OD': None, 'AR': None, 'SliderMultiplier': None, 'SliderTickRate': None}
 		self.count_normal = 0
 		self.count_slider = 0
@@ -102,12 +104,12 @@ class Beatmap:
 		"""Return a list of tuple (name_attribute, value_attribute) of Beatmap object."""
 		return self.__dict__.items()
 
-	def load(self, lines: list = None, hitobjects=True, modelA=None, modelB=None):
+	def load(self, lines: list = None, hitobjects=True, modelsA: list = None, modelsB: list = None):
 		"""Load all data of beatmap and initialize the object."""
 
 		with open(self.path, 'r', encoding='utf8') as beatmap:
 			lines = [l for l in beatmap.read().split('\n') if l != '']
-		valid, data = load_beatmap(self.path, lines=lines, modelA=modelA, modelB=modelB)
+		valid, data = load_beatmap(self.path, lines=lines, modelsA=modelsA, modelsB=modelsB)
 
 		if valid:
 			self.name = data['title']
@@ -121,6 +123,8 @@ class Beatmap:
 			self.difficulties['AR'] = data['ar']
 			self.difficulties['SliderMultiplier'] = data['slider_multiplier']
 			self.difficulties['SliderTickRate'] = data['slider_tick_rate']
+			self.diff_speed = data['diff_speed']
+			self.diff_aim = data['diff_aim']
 			self.stars = data['stars']
 			self.time = data['time']
 			self.diffname = data['difficulty_name']
@@ -167,6 +171,8 @@ class Beatmap:
 		'Title': self.name,
 		'Creator': self.creator,
 		'DifficultyName': self.diffname,
+		'DiffSpeed': self.diff_speed if self.diff_speed > 0 else '',
+		'DiffAim': self.diff_aim if self.diff_aim > 0 else '',
 		'Stars': self.stars if self.stars > 0 else '',
 		'HP': self.difficulties['HP'],
 		'CS': self.difficulties['CS'],
@@ -181,8 +187,8 @@ class Beatmap:
 		return pd.DataFrame(data=data, index=range(1), columns=data.keys())
 
 	@staticmethod
-	def from_file(filepath: str, hitobjects: bool = True, modelA=None, modelB=None):
+	def from_file(filepath: str, hitobjects: bool = True, modelsA: list = None, modelsB: list = None):
 		"""Return a Beatmap instance with all data find in filepath."""
 		beatmap = Beatmap(filepath)
-		beatmap.load(hitobjects=hitobjects, modelA=modelA, modelB=modelB)
+		beatmap.load(hitobjects=hitobjects, modelsA=modelsA, modelsB=modelsB)
 		return beatmap

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## V3.20210114
+Optimisation of model ! with two news stats estimated (if you don't use http requests):
+ * DiffSpeed
+ * DiffAim
+
 ## V2.20200104
 Updated with https requests!
  * The data of beatmaps can be loaded with http requests and the [osu!api][api]. To do this, use the `api_key` argument (In function and method of load data). For more information, look the [wiki][wiki].

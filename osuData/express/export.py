@@ -20,12 +20,18 @@ try:
 	from ..utility import Logs, progress_bar
 	from ..osuDataClass import Beatmap, BeatmapSet
 	from ..osuDataClass.beatmapError import BeatmapError
-	from ..bin import path_modelA, path_modelB
+	from ..bin import (
+		path_diffAim_modelA, path_diffAim_modelB,
+		path_diffSpeed_modelA, path_diffSpeed_modelB,
+		path_stars_modelA, path_stars_modelB)
 except ValueError:  # When script.py is the __main__
 	from utility import Logs, progress_bar
 	from osuDataClass import Beatmap, BeatmapSet
 	from osuDataClass.beatmapError import BeatmapError
-	from bin import path_modelA, path_modelB
+	from bin import (
+		path_diffAim_modelA, path_diffAim_modelB,
+		path_diffSpeed_modelA, path_diffSpeed_modelB,
+		path_stars_modelA, path_stars_modelB)
 
 
 def to_csv(folderpath: str, api_key: str = None, csv_path: str = ''):
@@ -66,13 +72,18 @@ def beatmapSet_objects(osu_path: str, api_key: str = None, n: int = None, hitobj
 	and the list path of beatmaps where there is a error.
 	"""
 	if api_key is None and sklearn_imported:
-		with open(path_modelA, 'rb') as f:
-			modelA = pickle.load(f)
-		with open(path_modelB, 'rb') as f:
-			modelB = pickle.load(f)
+		modelsA = []
+		for path in [path_diffSpeed_modelA, path_diffAim_modelA, path_stars_modelA]:
+			with open(path, 'rb') as f:
+				modelsA.append(pickle.load(f))
+
+		modelsB = []
+		for path in [path_diffSpeed_modelB, path_diffAim_modelB, path_stars_modelB]:
+			with open(path, 'rb') as f:
+				modelsB.append(pickle.load(f))
 	else:
-		modelA = None
-		modelB = None
+		modelsA = None
+		modelsB = None
 
 	beatmap_set_objects = []
 	errors = []
@@ -98,7 +109,7 @@ def beatmapSet_objects(osu_path: str, api_key: str = None, n: int = None, hitobj
 					i_real = i-(n-n_init) if n < len(list_dir) else i
 					progress_bar(i_real, n_init, start=0 if i == i_real else -1, info=os.path.join(songspath, name), length=60, suffix=f'Directories - ({current_speed} dir/s - mean: {speed} dir/s)', compact=compact_log)
 				try:
-					beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), api_key=api_key, hitobjects=hitobjects, modelA=modelA, modelB=modelB)
+					beatmap_set = BeatmapSet.from_folder(os.path.join(songspath, name), api_key=api_key, hitobjects=hitobjects, modelsA=modelsA, modelsB=modelsB)
 					beatmap_set_objects.append(beatmap_set)
 				except ValueError:  # BeatmapSet not published
 					beatmap_set = BeatmapSet(os.path.join(songspath, name))

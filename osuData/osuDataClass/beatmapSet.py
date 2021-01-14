@@ -21,9 +21,15 @@ from pydub.playback import play
 from .beatmap import Beatmap
 from .load_data import load_beatmap, beatmaps_from_http
 try:
-	from ..bin import path_modelA, path_modelB
+	from ..bin import (
+		path_diffAim_modelA, path_diffAim_modelB,
+		path_diffSpeed_modelA, path_diffSpeed_modelB,
+		path_stars_modelA, path_stars_modelB)
 except ValueError:  # when the __main__ is script.py
-	from bin import path_modelA, path_modelB
+	from bin import (
+		path_diffAim_modelA, path_diffAim_modelB,
+		path_diffSpeed_modelA, path_diffSpeed_modelB,
+		path_stars_modelA, path_stars_modelB)
 
 
 class BeatmapSet:
@@ -138,7 +144,7 @@ class BeatmapSet:
 		"""Similar to the items method of dict objects but with all attributes of BeatmapSet."""
 		return [(key, value) for key, value in self.__dict__.items()]
 
-	def load_from_files(self, mode: int = None, hitobjects=True, modelA=None, modelB=None):
+	def load_from_files(self, mode: int = None, hitobjects=True, modelsA=None, modelsB=None):
 		"""
 		Initialize BeatmapSet object from files of beatmaps.
 		Use `modes` argument if you want get specifics modes.
@@ -146,14 +152,18 @@ class BeatmapSet:
 		self.date_add = datetime.fromtimestamp(os.path.getctime(self.folderpath)).strftime('%Y-%m-%d %H:%M:%S')
 		try:
 			self.id = int(os.path.basename(self.folderpath).split(' ')[0])
-		except ValueError as e:
+		except ValueError as e:  # Beatmaps not published
 			pass
-		if modelA is None and sklearn_imported:
-			with open(path_modelA, 'rb') as f:
-				modelA = pickle.load(f)
-		if modelB is None and sklearn_imported:
-			with open(path_modelB, 'rb') as f:
-				modelB = pickle.load(f)
+		if modelsA is None and sklearn_imported:
+			modelsA = []
+			for path in [path_diffSpeed_modelA, path_diffAim_modelA, path_stars_modelA]:
+				with open(path, 'rb') as f:
+					modelsA.append(pickle.load(f))
+		if modelsB is None and sklearn_imported:
+			modelsB = []
+			for path in [path_diffSpeed_modelB, path_diffAim_modelB, path_stars_modelB]:
+				with open(path, 'rb') as f:
+					modelsB.append(pickle.load(f))
 
 		first = True
 		for name in os.listdir(self.folderpath):
@@ -171,7 +181,7 @@ class BeatmapSet:
 						first = False
 
 				beatmap = Beatmap(path)
-				beatmap.load(lines=lines, hitobjects=hitobjects, modelA=modelA, modelB=modelB)
+				beatmap.load(lines=lines, hitobjects=hitobjects, modelsA=modelsA, modelsB=modelsB)
 				if beatmap.valid and (mode is None or beatmap.mode == mode):
 					self.beatmaps.append(beatmap)
 				elif not beatmap.valid:
@@ -208,10 +218,12 @@ class BeatmapSet:
 				beatmap.creator = line['creator']
 				beatmap.diffname = line['version']
 				beatmap.time = int(line['hit_length']) * 1000
+				beatmap.diff_speed = line['diff_speed']
+				beatmap.diff_aim =line['diff_aim']
 				beatmap.stars = float(line['difficultyrating'])
 				beatmap.difficulties = {'HP': line['diff_drain'], 'CS': line['diff_size'],
 				'OD': line['diff_overall'], 'AR': line['diff_approach'],
-				'SliderMultiplier': line['diff_speed'], 'SliderTickRate': line['diff_aim']}
+				'SliderMultiplier': '', 'SliderTickRate': ''}
 				beatmap.count_normal = line['count_normal']
 				beatmap.count_slider = line['count_slider']
 				beatmap.count_spinner = line['count_spinner']
@@ -232,10 +244,10 @@ class BeatmapSet:
 		if api_key is None:
 			self.load_from_files(**kwargs)
 		else:
-			if 'modelA' in kwargs:
-				del(kwargs['modelA'])
-			if 'modelB' in kwargs:
-				del(kwargs['modelB'])
+			if 'modelsA' in kwargs:
+				del(kwargs['modelsA'])
+			if 'modelsB' in kwargs:
+				del(kwargs['modelsB'])
 			self.load_from_http(api_key=api_key, **kwargs)
 
 	def to_dataframe(self):
@@ -247,7 +259,7 @@ class BeatmapSet:
 			df[df['Countdown'] == -1]['Countdown'] = ''
 		else:
 			df = pd.DataFrame(columns=['Version_fmt', 'Countdown', 'Mode', 'Title',
-				'Creator', 'DifficultyName', 'Stars', 'HP', 'CS', 'OD', 'AR', 'SliderMultiplier',
+				'Creator', 'DifficultyName', 'DiffSpeed', 'DiffAim', 'Stars', 'HP', 'CS', 'OD', 'AR', 'SliderMultiplier',
 				'SliderTickRate', 'CountNormal', 'CountSlider', 'CountSpinner', 'Time', 'Date_Add'])
 		return df
 
@@ -294,11 +306,11 @@ class BeatmapSet:
 		play(self.mp3_object())
 
 	@staticmethod
-	def from_folder(folderpath: str, api_key: str = None, mode=None, hitobjects: bool = True, modelA=None, modelB=None):
+	def from_folder(folderpath: str, api_key: str = None, mode=None, hitobjects: bool = True, modelsA: list = None, modelsB: list = None):
 		"""
 		Return a BeatmapSet instance with all data find in folderpath.
 		If `modes` contain several osu! modes (2 or more) and than `api_key` is not None, all beatmaps are export.
 		"""
 		beatmap_set = BeatmapSet(folderpath)
-		beatmap_set.load(api_key=api_key, mode=mode, hitobjects=hitobjects, modelA=modelA, modelB=modelB)
+		beatmap_set.load(api_key=api_key, mode=mode, hitobjects=hitobjects, modelsA=modelsA, modelsB=modelsB)
 		return beatmap_set
