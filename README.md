@@ -8,9 +8,7 @@ You can use `export` and `info` modules to work without object-oriented programm
 
 ## Index <a id="index"></a>
  1. [Global informations](#globalInfos)
-
  2. [Requirements](#requirements)
-
  3. [Installation](#installation)
 
 
@@ -33,21 +31,19 @@ You can use `export` and `info` modules to work without object-oriented programm
 
  * [**Documentation**](https://github.com/LostPy/osuData/wiki)
 
-
 ## Requirements: <a id="requirements"></a>
 ### Mandatory
- * [Python 3.x][py]
- * [requests][req] (To execute https requests)
- * [pydub][pydub] (To manipulate mp3 file and play music)
- * [numpy][np] (Basis for data manipulation)
- * [scipy][scipy] (To extract music data)
- * [pandas][pd] (Basis for data manipulation)
+* [Python 3.x][py]
+* [requests][req] (To execute https requests)
+* [pydub][pydub] (To manipulate mp3 file and play music)
+* [numpy][np] (Basis for data manipulation)
+* [scipy][scipy] (To extract music data)
+* [pandas][pd] (Basis for data manipulation)
 
 ### Optionnal
- * [colorama][color] (For coulour logs)
- * [plotly][plotly] or [seaborn][seaborn] (To visualize data)
- * [scikit-learn][sklearn] (To initialize `stars` number without http requests)
-
+* [colorama][color] (For coulour logs)
+* [plotly][plotly] or [seaborn][seaborn] (To visualize data)
+* [scikit-learn][sklearn] (To initialize `stars` number without http requests)
 
 ## Installation <a id="installation"></a>
 To install this package, you can use the following command:
