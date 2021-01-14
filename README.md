@@ -3,9 +3,10 @@
 
 <img align="left" width="100" height="100" src="https://www.python.org/static/img/python-logo-large.c36dccadd999.png"> <img align="right" width="100" height="100" src="https://github.com/ppy/osu/blob/master/assets/lazer.png">
 
-A small framework to work or vizualise osu! beatmaps data.
+A small framework to work or vizualise osu! beatmaps data.  
 This framework use object-oriented programming (OOP) to easily manage beatmap data.
-You can use `export` and `info` modules to work without object-oriented programming.
+You can use `export` and `info` modules to work without object-oriented programming.  
+The documentation is in [wiki of this GitHub](https://github.com/LostPy/osuData/wiki).
 
 ## Index <a id="index"></a>
  1. [Global informations](#globalInfos)
