@@ -14,7 +14,7 @@ You can use `export` and `info` modules to work without object-oriented programm
 ## Global informations <a id="globalInfos"></a>
  * Author: [LostPy][me]
 
- * Version: 2.0
+ * Version: 3.0
  
  * License: [MIT License][license]
 
