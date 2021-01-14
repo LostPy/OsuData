@@ -93,7 +93,7 @@ For more information, you can read [Models_details](https://github.com/LostPy/os
 
 ### Comparison of models
 
-[![Comparison of models](https://github.com/LostPy/OsuData/blob/main/im/comparison_between_modelA_modelB.png)]
+![Comparison of models](https://github.com/LostPy/OsuData/blob/main/im/comparison_between_modelA_modelB.png)
 
 
 [py]: https://www.python.org/
