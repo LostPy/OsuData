@@ -29,31 +29,25 @@ def predict_diff(hp: float, cs: float, od: float, ar: float, modelsA: list = Non
 	if sklearn_imported:
 		if ar != '':
 			if modelsA is None:
-				with open(path_diffSpeed_modelA, 'rb') as save:
-					model_speed = pickle.load(save)
-				with open(path_diffAim_modelA, 'rb') as save:
-					model_aim = pickle.load(save)
-				with open(path_stars_modelA, 'rb') as save:
-					model_stars = pickle.load(save)
-			else:
-				model_speed = modelsA[0]
-				model_aim = modelsA[1]
-				model_stars = modelsA[2]
+				modelsA = []
+				for path in [path_diffSpeed_modelA, path_diffAim_modelA, path_stars_modelA]:
+					with open(path, 'rb') as f:
+						modelsA.append(pickle.load(f))
+			model_speed = modelsA[0]
+			model_aim = modelsA[1]
+			model_stars = modelsA[2]
 			diff_speed = round(model_speed.predict([[od, ar]])[0], ndigits=3)
 			diff_aim = round(model_aim.predict([[od, ar]])[0], ndigits=3)
 			stars = round(model_stars.predict([[hp, cs, od, ar, diff_speed, diff_aim]])[0], ndigits=3)
 		else:
 			if modelsB is None:
-				with open(path_diffSpeed_modelB, 'rb') as save:
-					model_speed = pickle.load(save)
-				with open(path_diffAim_modelB, 'rb') as save:
-					model_aim = pickle.load(save)
-				with open(path_stars_modelB, 'rb') as save:
-					model_stars = pickle.load(save)
-			else:
-				model_speed = modelsB[0]
-				model_aim = modelsB[1]
-				model_stars = modelsB[2]
+				modelsB = []
+				for path in [path_diffSpeed_modelB, path_diffAim_modelB, path_stars_modelB]:
+					with open(path, 'rb') as f:
+						modelsB.append(pickle.load(f))
+			model_speed = modelsB[0]
+			model_aim = modelsB[1]
+			model_stars = modelsB[2]
 			diff_speed = round(model_speed.predict([[od]])[0], ndigits=3)
 			diff_aim = round(model_aim.predict([[od]])[0], ndigits=3)
 			stars = round(model_stars.predict([[od, diff_speed, diff_aim]])[0], ndigits=3)
