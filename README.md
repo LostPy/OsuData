@@ -11,7 +11,6 @@ You can use `export` and `info` modules to work without object-oriented programm
  2. [Requirements](#requirements)
  3. [Installation](#installation)
 
-
 ## Global informations <a id="globalInfos"></a>
  * Author: [LostPy][me]
 
