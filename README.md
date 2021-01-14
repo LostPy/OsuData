@@ -10,11 +10,12 @@ You can use `export` and `info` modules to work without object-oriented programm
  1. [Global informations](#globalInfos)
  2. [Requirements](#requirements)
  3. [Installation](#installation)
+ 4. [Models](#models)
 
 ## Global informations <a id="globalInfos"></a>
  * Author: [LostPy][me]
 
- * Version: 3.0
+ * Version: 3
  
  * License: [MIT License][license]
 
@@ -57,6 +58,42 @@ To install this package, you can use the following command:
 OR
 
 `pip install git+https://github.com/LostPy/OsuData.git@main -U`
+
+## Models <a id="models"></a>
+
+This package can estimate 3 stats:
+ * [DiffSpeed][api]
+ * [DiffAim][api]
+ * [Stars][api]
+
+### Global information on models
+
+The models used to estimate these stats has been found with [scickit-learn (sklearn)][sklearn].
+
+There are 2 groups of models, A and B:
+ * Binary files for the group A:
+   * `/bin/model_DiffSpeed_A.bin`
+   * `/bin/model_DiffAim_A.bin`
+   * `/bin/model_Stars_A.bin`
+
+ * Binary files for the group B:
+   * `/bin/model_DiffSpeed_B.bin`
+   * `/bin/model_DiffAim_B.bin`
+   * `/bin/model_Stars_B.bin`
+
+The group A models use 'AR' stat, it is preferable for versions beatmap higher than 7.  
+The group B don't use 'AR' stat, it is used to estimate the values for beatmap with a version lower than 7.
+
+### Use models
+Some functions have the arguments `modelsA` and `modelsB`, these arguments take a list of models `[model_DiffSpeed, model_DiffAim, model_stars]`. You can use these arguments to load the models at the beginning of your program and avoid loading them every time you read the files.
+
+It is dangerous to use a custom template. The models must absolutely take the same data and in the same order as those used by default.
+
+For more information, you can read [Models_details](https://github.com/LostPy/osuData/blob/main/Models_details.md).
+
+### Comparison of models
+
+[![Comparison of models](https://github.com/LostPy/OsuData/blob/main/im/comparison_between_modelA_modelB.png)]
 
 
 [py]: https://www.python.org/
